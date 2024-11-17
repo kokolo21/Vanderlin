@@ -28,20 +28,14 @@ GLOBAL_VAR_INIT(running_create_and_destroy, FALSE)
 		/obj/machinery/launchpad/briefcase,
 		/obj/item/storage/box/syndicate/bundle_A, // can contain a launchpad briefcase
 		//template types
-		/obj/item/gun/magic,
-		/obj/item/gun/magic/staff,
 		//template type again
 		/obj/item/storage/fancy,
 		//needs a mob passed to view it
 		/atom/movable/screen/credit,
 		//invalid without mob/living passed
 		/obj/shapeshift_holder,
-		//abstract type, should not be spawned but subtypes are okay
-		/mob/living/silicon/robot/modules,
 		//explodes when deleted
 		/obj/structure/checkoutmachine,
-		//spawns a bunch of swarmers that wander off and damage stuff that gets spawned
-		/mob/living/simple_animal/hostile/megafauna/swarmer_swarm_beacon,
 		// requires a pod passed
 		/obj/effect/DPfall,
 		/obj/effect/DPtarget,

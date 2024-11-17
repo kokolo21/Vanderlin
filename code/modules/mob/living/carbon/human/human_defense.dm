@@ -331,68 +331,6 @@
 				apply_damage(damage, BRUTE, affecting, run_armor_check(affecting, "melee", damage = damage))
 		return 1
 
-/mob/living/carbon/human/attack_alien(mob/living/carbon/alien/humanoid/M)
-	if(check_shields(M, 0, "the M.name"))
-		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>", \
-						"<span class='danger'>[M] attempts to touch you!</span>", "<span class='hear'>I hear a swoosh!</span>", null, M)
-		to_chat(M, "<span class='warning'>I attempt to touch [src]!</span>")
-		return 0
-
-	if(..())
-		if(M.used_intent.type == INTENT_HARM)
-			if (wear_pants)
-				wear_pants.add_fingerprint(M)
-			var/damage = prob(90) ? 20 : 0
-			if(!damage)
-				playsound(loc, 'sound/blank.ogg', 50, TRUE, -1)
-				visible_message("<span class='danger'>[M] lunges at [src]!</span>", \
-								"<span class='danger'>[M] lunges at you!</span>", "<span class='hear'>I hear a swoosh!</span>", null, M)
-				to_chat(M, "<span class='danger'>I lunge at [src]!</span>")
-				return 0
-			var/obj/item/bodypart/affecting = get_bodypart(ran_zone(M.zone_selected))
-			if(!affecting)
-				affecting = get_bodypart(BODY_ZONE_CHEST)
-			var/armor_block = run_armor_check(affecting, "melee","","",10)
-
-			playsound(loc, 'sound/blank.ogg', 25, TRUE, -1)
-			visible_message("<span class='danger'>[M] slashes at [src]!</span>", \
-							"<span class='danger'>[M] slashes at you!</span>", "<span class='hear'>I hear a sickening sound of a slice!</span>", null, M)
-			to_chat(M, "<span class='danger'>I slash at [src]!</span>")
-			log_combat(M, src, "attacked")
-			if(!dismembering_strike(M, M.zone_selected)) //Dismemberment successful
-				return 1
-			apply_damage(damage, BRUTE, affecting, armor_block)
-
-		if(M.used_intent.type == INTENT_DISARM) //Always drop item in hand, if no item, get stun instead.
-			var/obj/item/I = get_active_held_item()
-			if(I && dropItemToGround(I))
-				playsound(loc, 'sound/blank.ogg', 25, TRUE, -1)
-				visible_message("<span class='danger'>[M] disarms [src]!</span>", \
-								"<span class='danger'>[M] disarms you!</span>", "<span class='hear'>I hear aggressive shuffling!</span>", null, M)
-				to_chat(M, "<span class='danger'>I disarm [src]!</span>")
-			else
-				playsound(loc, 'sound/blank.ogg', 25, TRUE, -1)
-				Paralyze(100)
-				log_combat(M, src, "tackled")
-				visible_message("<span class='danger'>[M] tackles [src] down!</span>", \
-								"<span class='danger'>[M] tackles you down!</span>", "<span class='hear'>I hear aggressive shuffling followed by a loud thud!</span>", null, M)
-				to_chat(M, "<span class='danger'>I tackle [src] down!</span>")
-
-
-/mob/living/carbon/human/attack_larva(mob/living/carbon/alien/larva/L)
-
-	if(..()) //successful larva bite.
-		var/damage = rand(1, 3)
-		if(check_shields(L, damage, "the [L.name]"))
-			return 0
-		if(stat != DEAD)
-			L.amount_grown = min(L.amount_grown + damage, L.max_grown)
-			var/obj/item/bodypart/affecting = get_bodypart(ran_zone(L.zone_selected))
-			if(!affecting)
-				affecting = get_bodypart(BODY_ZONE_CHEST)
-			var/armor_block = run_armor_check(affecting, "melee")
-			apply_damage(damage, BRUTE, affecting, armor_block)
-
 
 /mob/living/carbon/human/attack_animal(mob/living/simple_animal/M)
 	. = ..()
@@ -426,66 +364,6 @@
 			return FALSE
 		else
 			retaliate(M)
-
-/mob/living/carbon/human/attack_slime(mob/living/simple_animal/slime/M)
-	if(..()) //successful slime attack
-		var/damage = rand(5, 25)
-		if(M.is_adult)
-			damage = rand(10, 35)
-
-		if(check_shields(M, damage, "the [M.name]"))
-			return 0
-
-		var/dam_zone = dismembering_strike(M, pick(BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG))
-		if(!dam_zone) //Dismemberment successful
-			return 1
-
-		var/obj/item/bodypart/affecting = get_bodypart(ran_zone(dam_zone))
-		if(!affecting)
-			affecting = get_bodypart(BODY_ZONE_CHEST)
-		var/armor_block = run_armor_check(affecting, "melee")
-		apply_damage(damage, BRUTE, affecting, armor_block)
-
-/mob/living/carbon/human/mech_melee_attack(obj/mecha/M)
-
-	if(M.occupant.used_intent.type == INTENT_HARM)
-		if(HAS_TRAIT(M.occupant, TRAIT_PACIFISM))
-			to_chat(M.occupant, "<span class='warning'>I don't want to harm other living beings!</span>")
-			return
-		M.do_attack_animation(src)
-		if(M.damtype == "brute")
-			step_away(src,M,15)
-		var/obj/item/bodypart/temp = get_bodypart(pick(BODY_ZONE_CHEST, BODY_ZONE_CHEST, BODY_ZONE_CHEST, BODY_ZONE_HEAD))
-		if(temp)
-			var/update = 0
-			var/dmg = rand(M.force/2, M.force)
-			switch(M.damtype)
-				if("brute")
-					if(M.force > 35) // durand and other heavy mechas
-						Unconscious(20)
-					else if(M.force > 20 && !IsKnockdown()) // lightweight mechas like gygax
-						Knockdown(40)
-					update |= temp.receive_damage(dmg, 0)
-					playsound(src, 'sound/blank.ogg', 50, TRUE)
-				if("fire")
-					update |= temp.receive_damage(0, dmg)
-					playsound(src, 'sound/blank.ogg', 50, TRUE)
-				if("tox")
-					M.mech_toxin_damage(src)
-				else
-					return
-			if(update)
-				update_damage_overlays()
-			updatehealth()
-
-		visible_message("<span class='danger'>[M.name] hits [src]!</span>", \
-						"<span class='danger'>[M.name] hits you!</span>", "<span class='hear'>I hear a sickening sound of flesh hitting flesh!</span>", COMBAT_MESSAGE_RANGE, M)
-		to_chat(M, "<span class='danger'>I hit [src]!</span>")
-		log_combat(M.occupant, src, "attacked", M, "(INTENT: [uppertext(M.occupant.used_intent)]) (DAMTYPE: [uppertext(M.damtype)])")
-
-	else
-		..()
-
 
 /mob/living/carbon/human/ex_act(severity, target, origin)
 	if(origin && istype(origin, /datum/spacevine_mutation) && isvineimmune(src))
@@ -522,8 +400,6 @@
 				brute_loss = 30*(2 - round(bomb_armor*0.01, 0.05))
 				burn_loss = brute_loss				//damage gets reduced from 120 to up to 60 combined brute+burn
 			damage_clothes(100 - bomb_armor, BRUTE, "bomb")
-//			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
-//				adjustEarDamage(30, 120)
 			Unconscious(20)							//short amount of time for follow up attacks against elusive enemies like wizards
 			Knockdown(200 - (bomb_armor * 1.6)) 	//between ~4 and ~20 seconds of knockdown depending on bomb armor
 
@@ -531,9 +407,6 @@
 			brute_loss = 5
 			if(bomb_armor)
 				brute_loss = 5*(2 - round(bomb_armor*0.01, 0.05))
-//			damage_clothes(max(50 - bomb_armor, 0), BRUTE, "bomb")
-//			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
-//				adjustEarDamage(15,60)
 			Knockdown(160 - (bomb_armor * 1.6))		//100 bomb armor will prevent knockdown altogether
 
 	take_overall_damage(brute_loss,burn_loss)
@@ -549,16 +422,6 @@
 				max_limb_loss--
 				if(!max_limb_loss)
 					break
-
-
-/mob/living/carbon/human/blob_act(obj/structure/blob/B)
-	if(stat == DEAD)
-		return
-	show_message("<span class='danger'>The blob attacks you!</span>")
-	var/dam_zone = pick(BODY_ZONE_CHEST, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG)
-	var/obj/item/bodypart/affecting = get_bodypart(ran_zone(dam_zone))
-	apply_damage(5, BRUTE, affecting, run_armor_check(affecting, "melee"))
-
 
 ///Calculates the siemens coeff based on clothing and species, can also restart hearts.
 /mob/living/carbon/human/electrocute_act(shock_damage, source, siemens_coeff = 1, flags = NONE)
@@ -825,7 +688,7 @@
 			examination += "<span class='danger'>[m1] TETRAPLEGIC!</span>"
 	else if(HAS_TRAIT(src, TRAIT_PARALYSIS_R_LEG) && HAS_TRAIT(src, TRAIT_PARALYSIS_L_LEG))
 		examination += "<span class='warning'>[m1] PARAPLEGIC!</span>"
-	
+
 	var/static/list/body_zones = list(
 		BODY_ZONE_HEAD,
 		BODY_ZONE_CHEST,

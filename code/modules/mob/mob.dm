@@ -134,12 +134,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 	to_chat(usr, t)
 
 /**
- * Return the desc of this mob for a photo
- */
-/mob/proc/get_photo_description(obj/item/camera/camera)
-	return "a ... thing?"
-
-/**
  * Show a message to this mob (visual or audible)
  */
 /mob/proc/show_message(msg, type, alt_msg, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
@@ -535,9 +529,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 	set hidden = 1
 	set src = usr
 
-	if(ismecha(loc))
-		return
-
 	if(incapacitated())
 		return
 
@@ -702,8 +693,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 		return
 	if(!Adjacent(usr))
 		return
-	if(isAI(M))
-		return
 /**
  * Handle the result of a click drag onto this mob
  *
@@ -713,14 +702,8 @@ GLOBAL_VAR_INIT(mobids, 1)
 	. = ..()
 	if(ismob(dropping) && dropping != user)
 		var/mob/M = dropping
-		if(ismob(user))
-			var/mob/U = user
-			if(!iscyborg(U) || !U.cmode || U.used_intent.type == INTENT_HARM)
-				M.show_inv(U)
-				return TRUE
-		else
-			M.show_inv(user)
-			return TRUE
+		M.show_inv(user)
+		return TRUE
 
 ///Is the mob muzzled (default false)
 /mob/proc/is_muzzled()
@@ -782,7 +765,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 				stat(null)
 				for(var/datum/controller/subsystem/SS in Master.subsystems)
 					SS.stat_entry()
-			GLOB.cameranet.stat_entry()
 		if(statpanel("Tickets"))
 			GLOB.ahelp_tickets.stat_entry()
 		if(length(GLOB.sdql2_queries))
@@ -870,9 +852,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 		return
 	if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
 		return FALSE
-	if(sexcon)
-		if(!sexcon.can_change_dir())
-			return FALSE
 	if(IsImmobilized())
 		return FALSE
 	return ..()
@@ -925,9 +904,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 
 /mob/proc/activate_hand(selhand)
 	return
-
-/mob/proc/assess_threat(judgement_criteria, lasercolor = "", datum/callback/weaponcheck=null) //For sec bot threat assessment
-	return 0
 
 ///Get the ghost of this mob (from the mind)
 /mob/proc/get_ghost(even_if_they_cant_reenter, ghosts_with_clients)
@@ -1092,9 +1068,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 		//update the datacore records! This is goig to be a bit costly.
 		replace_records_name(oldname,newname)
 
-		//update our pda and id if we have them on our person
-		replace_identification_name(oldname,newname)
-
 		for(var/datum/mind/T in SSticker.minds)
 			for(var/datum/objective/obj in T.get_all_objectives())
 				// Only update if this player is a target
@@ -1106,32 +1079,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 /mob/proc/replace_records_name(oldname,newname)
 	return
 
-///update the ID name of this mob
-/mob/proc/replace_identification_name(oldname,newname)
-	var/list/searching = GetAllContents()
-	var/search_id = 1
-	var/search_pda = 1
-
-	for(var/A in searching)
-		if( search_id && istype(A, /obj/item/card/id) )
-			var/obj/item/card/id/ID = A
-			if(ID.registered_name == oldname)
-				ID.registered_name = newname
-				ID.update_label()
-				if(ID.registered_account?.account_holder == oldname)
-					ID.registered_account.account_holder = newname
-				if(!search_pda)
-					break
-				search_id = 0
-
-		else if( search_pda && istype(A, /obj/item/pda) )
-			var/obj/item/pda/PDA = A
-			if(PDA.owner == oldname)
-				PDA.owner = newname
-				PDA.update_label()
-				if(!search_id)
-					break
-				search_pda = 0
 
 /mob/proc/update_stat()
 	return
@@ -1164,10 +1111,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 	if(!client.charging && !atkswinging)
 		if(examine_cursor_icon && client.keys_held["Shift"]) //mouse shit is hardcoded, make this non hard-coded once we make mouse modifiers bindable
 			client.mouse_pointer_icon = examine_cursor_icon
-	else if (ismecha(loc))
-		var/obj/mecha/M = loc
-		if(M.mouse_pointer)
-			client.mouse_pointer_icon = M.mouse_pointer
 	else if (istype(loc, /obj/vehicle/sealed))
 		var/obj/vehicle/sealed/E = loc
 		if(E.mouse_pointer)
@@ -1210,7 +1153,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 	VV_DROPDOWN_OPTION(VV_HK_GIB, "Gib")
 	VV_DROPDOWN_OPTION(VV_HK_GIVE_SPELL, "Give Spell")
 	VV_DROPDOWN_OPTION(VV_HK_REMOVE_SPELL, "Remove Spell")
-	VV_DROPDOWN_OPTION(VV_HK_GIVE_DISEASE, "Give Disease")
 	VV_DROPDOWN_OPTION(VV_HK_GODMODE, "Toggle Godmode")
 	VV_DROPDOWN_OPTION(VV_HK_DROP_ALL, "Drop Everything")
 	VV_DROPDOWN_OPTION(VV_HK_REGEN_ICONS, "Regenerate Icons")
@@ -1241,10 +1183,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 		if(!check_rights(NONE))
 			return
 		usr.client.remove_spell(src)
-	if(href_list[VV_HK_GIVE_DISEASE])
-		if(!check_rights(NONE))
-			return
-		usr.client.give_disease(src)
 	if(href_list[VV_HK_GIB])
 		if(!check_rights(R_FUN))
 			return

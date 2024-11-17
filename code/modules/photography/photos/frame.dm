@@ -1,4 +1,58 @@
 // Picture frames
+/obj/item/wallframe
+	icon = 'icons/obj/wallframe.dmi'
+	flags_1 = CONDUCT_1
+	item_state = "syringe_kit"
+	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
+	w_class = WEIGHT_CLASS_SMALL
+	var/result_path
+	var/inverse = 0 // For inverse dir frames like light fixtures.
+	var/pixel_shift //The amount of pixels
+
+/obj/item/wallframe/proc/try_build(turf/on_wall, mob/user)
+	if(get_dist(on_wall,user)>1)
+		return
+	var/ndir = get_dir(on_wall, user)
+	if(!(ndir in GLOB.cardinals))
+		return
+	var/turf/T = get_turf(user)
+	if(!isfloorturf(T))
+		to_chat(user, "<span class='warning'>I cannot place [src] on this spot!</span>")
+		return
+	if(gotwallitem(T, ndir, inverse*2))
+		to_chat(user, "<span class='warning'>There's already an item on this wall!</span>")
+		return
+
+	return TRUE
+
+/obj/item/wallframe/proc/attach(turf/on_wall, mob/user)
+	if(result_path)
+		playsound(src.loc, 'sound/blank.ogg', 75, TRUE)
+		user.visible_message("<span class='notice'>[user.name] attaches [src] to the wall.</span>",
+			"<span class='notice'>I attach [src] to the wall.</span>",
+			"<span class='hear'>I hear clicking.</span>")
+		var/ndir = get_dir(on_wall,user)
+		if(inverse)
+			ndir = turn(ndir, 180)
+
+		var/obj/O = new result_path(get_turf(user), ndir, TRUE)
+		if(pixel_shift)
+			switch(ndir)
+				if(NORTH)
+					O.pixel_y = pixel_shift
+				if(SOUTH)
+					O.pixel_y = -pixel_shift
+				if(EAST)
+					O.pixel_x = pixel_shift
+				if(WEST)
+					O.pixel_x = -pixel_shift
+		after_attach(O)
+
+	qdel(src)
+
+/obj/item/wallframe/proc/after_attach(obj/O)
+	transfer_fingerprints_to(O)
 
 /obj/item/wallframe/picture
 	name = "picture frame"

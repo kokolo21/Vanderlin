@@ -47,45 +47,12 @@
 	results = list(/datum/reagent/consumable/sodiumchloride = 3)
 	required_reagents = list(/datum/reagent/water = 1, /datum/reagent/sodium = 1, /datum/reagent/chlorine = 1)
 
-/datum/chemical_reaction/plasmasolidification
-	name = "Solid Plasma"
-	id = "solidplasma"
-	required_reagents = list(/datum/reagent/iron = 5, /datum/reagent/consumable/frostoil = 5, /datum/reagent/toxin/plasma = 20)
-	mob_react = FALSE
-
-/datum/chemical_reaction/plasmasolidification/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
-	for(var/i = 1, i <= created_volume, i++)
-		new /obj/item/stack/sheet/mineral/plasma(location)
-
-/datum/chemical_reaction/goldsolidification
-	name = "Solid Gold"
-	id = "solidgold"
-	required_reagents = list(/datum/reagent/consumable/frostoil = 5, /datum/reagent/gold = 20, /datum/reagent/iron = 1)
-	mob_react = FALSE
-
-/datum/chemical_reaction/goldsolidification/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
-	for(var/i = 1, i <= created_volume, i++)
-		new /obj/item/stack/sheet/mineral/gold(location)
 
 /datum/chemical_reaction/capsaicincondensation
 	name = "Capsaicincondensation"
 	id = "capsaicincondensation"
 	results = list(/datum/reagent/consumable/condensedcapsaicin = 5)
 	required_reagents = list(/datum/reagent/consumable/capsaicin = 1, /datum/reagent/consumable/ethanol = 5)
-
-/datum/chemical_reaction/soapification
-	name = "Soapification"
-	id = "soapification"
-	required_reagents = list(/datum/reagent/liquidgibs = 10, /datum/reagent/lye  = 10) // requires two scooped gib tiles
-	required_temp = 374
-	mob_react = FALSE
-
-/datum/chemical_reaction/soapification/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
-	for(var/i = 1, i <= created_volume, i++)
-		new /obj/item/soap/homemade(location)
 
 /datum/chemical_reaction/candlefication
 	name = "Candlefication"
@@ -130,213 +97,7 @@
 	name = "Mulligan"
 	id = /datum/reagent/mulligan
 	results = list(/datum/reagent/mulligan = 1)
-	required_reagents = list(/datum/reagent/mutationtoxin/jelly = 1, /datum/reagent/toxin/mutagen = 1)
-
-
-////////////////////////////////// VIROLOGY //////////////////////////////////////////
-
-/datum/chemical_reaction/virus_food
-	name = "Virus Food"
-	id = /datum/reagent/consumable/virus_food
-	results = list(/datum/reagent/consumable/virus_food = 15)
-	required_reagents = list(/datum/reagent/water = 5, /datum/reagent/consumable/milk = 5)
-
-/datum/chemical_reaction/virus_food_mutagen
-	name = "mutagenic agar"
-	id = /datum/reagent/toxin/mutagen/mutagenvirusfood
-	results = list(/datum/reagent/toxin/mutagen/mutagenvirusfood = 1)
-	required_reagents = list(/datum/reagent/toxin/mutagen = 1, /datum/reagent/consumable/virus_food = 1)
-
-/datum/chemical_reaction/virus_food_synaptizine
-	name = "virus rations"
-	id = /datum/reagent/medicine/synaptizine/synaptizinevirusfood
-	results = list(/datum/reagent/medicine/synaptizine/synaptizinevirusfood = 1)
-	required_reagents = list(/datum/reagent/medicine/synaptizine = 1, /datum/reagent/consumable/virus_food = 1)
-
-/datum/chemical_reaction/virus_food_plasma
-	name = "virus plasma"
-	id = /datum/reagent/toxin/plasma/plasmavirusfood
-	results = list(/datum/reagent/toxin/plasma/plasmavirusfood = 1)
-	required_reagents = list(/datum/reagent/toxin/plasma = 1, /datum/reagent/consumable/virus_food = 1)
-
-/datum/chemical_reaction/virus_food_plasma_synaptizine
-	name = "weakened virus plasma"
-	id = /datum/reagent/toxin/plasma/plasmavirusfood/weak
-	results = list(/datum/reagent/toxin/plasma/plasmavirusfood/weak = 2)
-	required_reagents = list(/datum/reagent/medicine/synaptizine = 1, /datum/reagent/toxin/plasma/plasmavirusfood = 1)
-
-/datum/chemical_reaction/virus_food_mutagen_sugar
-	name = "sucrose agar"
-	id = /datum/reagent/toxin/mutagen/mutagenvirusfood/sugar
-	results = list(/datum/reagent/toxin/mutagen/mutagenvirusfood/sugar = 2)
-	required_reagents = list(/datum/reagent/consumable/sugar = 1, /datum/reagent/toxin/mutagen/mutagenvirusfood = 1)
-
-/datum/chemical_reaction/virus_food_mutagen_salineglucose
-	name = "sucrose agar"
-	id = "salineglucosevirusfood"
-	results = list(/datum/reagent/toxin/mutagen/mutagenvirusfood/sugar = 2)
-	required_reagents = list(/datum/reagent/medicine/salglu_solution = 1, /datum/reagent/toxin/mutagen/mutagenvirusfood = 1)
-
-/datum/chemical_reaction/virus_food_uranium
-	name = "Decaying uranium gel"
-	id = /datum/reagent/uranium/uraniumvirusfood
-	results = list(/datum/reagent/uranium/uraniumvirusfood = 1)
-	required_reagents = list(/datum/reagent/uranium = 1, /datum/reagent/consumable/virus_food = 1)
-
-/datum/chemical_reaction/virus_food_uranium_plasma
-	name = "Unstable uranium gel"
-	id = "uraniumvirusfood_plasma"
-	results = list(/datum/reagent/uranium/uraniumvirusfood/unstable = 1)
-	required_reagents = list(/datum/reagent/uranium = 5, /datum/reagent/toxin/plasma/plasmavirusfood = 1)
-
-/datum/chemical_reaction/virus_food_uranium_plasma_gold
-	name = "Stable uranium gel"
-	id = "uraniumvirusfood_gold"
-	results = list(/datum/reagent/uranium/uraniumvirusfood/stable = 1)
-	required_reagents = list(/datum/reagent/uranium = 10, /datum/reagent/gold = 10, /datum/reagent/toxin/plasma = 1)
-
-/datum/chemical_reaction/virus_food_uranium_plasma_silver
-	name = "Stable uranium gel"
-	id = "uraniumvirusfood_silver"
-	results = list(/datum/reagent/uranium/uraniumvirusfood/stable = 1)
-	required_reagents = list(/datum/reagent/uranium = 10, /datum/reagent/silver = 10, /datum/reagent/toxin/plasma = 1)
-
-/datum/chemical_reaction/mix_virus
-	name = "Mix Virus"
-	id = "mixvirus"
-	results = list(/datum/reagent/blood = 1)
-	required_reagents = list(/datum/reagent/consumable/virus_food = 1)
-	required_catalysts = list(/datum/reagent/blood = 1)
-	var/level_min = 1
-	var/level_max = 2
-
-/datum/chemical_reaction/mix_virus/on_reaction(datum/reagents/holder, created_volume)
-
-	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in holder.reagent_list
-	if(B && B.data)
-		var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
-		if(D)
-			D.Evolve(level_min, level_max)
-
-
-/datum/chemical_reaction/mix_virus/mix_virus_2
-
-	name = "Mix Virus 2"
-	id = "mixvirus2"
-	required_reagents = list(/datum/reagent/toxin/mutagen = 1)
-	level_min = 2
-	level_max = 4
-
-/datum/chemical_reaction/mix_virus/mix_virus_3
-
-	name = "Mix Virus 3"
-	id = "mixvirus3"
-	required_reagents = list(/datum/reagent/toxin/plasma = 1)
-	level_min = 4
-	level_max = 6
-
-/datum/chemical_reaction/mix_virus/mix_virus_4
-
-	name = "Mix Virus 4"
-	id = "mixvirus4"
-	required_reagents = list(/datum/reagent/uranium = 1)
-	level_min = 5
-	level_max = 6
-
-/datum/chemical_reaction/mix_virus/mix_virus_5
-
-	name = "Mix Virus 5"
-	id = "mixvirus5"
-	required_reagents = list(/datum/reagent/toxin/mutagen/mutagenvirusfood = 1)
-	level_min = 3
-	level_max = 3
-
-/datum/chemical_reaction/mix_virus/mix_virus_6
-
-	name = "Mix Virus 6"
-	id = "mixvirus6"
-	required_reagents = list(/datum/reagent/toxin/mutagen/mutagenvirusfood/sugar = 1)
-	level_min = 4
-	level_max = 4
-
-/datum/chemical_reaction/mix_virus/mix_virus_7
-
-	name = "Mix Virus 7"
-	id = "mixvirus7"
-	required_reagents = list(/datum/reagent/toxin/plasma/plasmavirusfood/weak = 1)
-	level_min = 5
-	level_max = 5
-
-/datum/chemical_reaction/mix_virus/mix_virus_8
-
-	name = "Mix Virus 8"
-	id = "mixvirus8"
-	required_reagents = list(/datum/reagent/toxin/plasma/plasmavirusfood = 1)
-	level_min = 6
-	level_max = 6
-
-/datum/chemical_reaction/mix_virus/mix_virus_9
-
-	name = "Mix Virus 9"
-	id = "mixvirus9"
-	required_reagents = list(/datum/reagent/medicine/synaptizine/synaptizinevirusfood = 1)
-	level_min = 1
-	level_max = 1
-
-/datum/chemical_reaction/mix_virus/mix_virus_10
-
-	name = "Mix Virus 10"
-	id = "mixvirus10"
-	required_reagents = list(/datum/reagent/uranium/uraniumvirusfood = 1)
-	level_min = 6
-	level_max = 7
-
-/datum/chemical_reaction/mix_virus/mix_virus_11
-
-	name = "Mix Virus 11"
-	id = "mixvirus11"
-	required_reagents = list(/datum/reagent/uranium/uraniumvirusfood/unstable = 1)
-	level_min = 7
-	level_max = 7
-
-/datum/chemical_reaction/mix_virus/mix_virus_12
-
-	name = "Mix Virus 12"
-	id = "mixvirus12"
-	required_reagents = list(/datum/reagent/uranium/uraniumvirusfood/stable = 1)
-	level_min = 8
-	level_max = 8
-
-/datum/chemical_reaction/mix_virus/rem_virus
-
-	name = "Devolve Virus"
-	id = "remvirus"
-	required_reagents = list(/datum/reagent/medicine/synaptizine = 1)
-	required_catalysts = list(/datum/reagent/blood = 1)
-
-/datum/chemical_reaction/mix_virus/rem_virus/on_reaction(datum/reagents/holder, created_volume)
-
-	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in holder.reagent_list
-	if(B && B.data)
-		var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
-		if(D)
-			D.Devolve()
-
-/datum/chemical_reaction/mix_virus/neuter_virus
-	name = "Neuter Virus"
-	id = "neutervirus"
-	required_reagents = list(/datum/reagent/toxin/formaldehyde = 1)
-	required_catalysts = list(/datum/reagent/blood = 1)
-
-/datum/chemical_reaction/mix_virus/neuter_virus/on_reaction(datum/reagents/holder, created_volume)
-
-	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in holder.reagent_list
-	if(B && B.data)
-		var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
-		if(D)
-			D.Neuter()
-
-
+	required_reagents = list(/datum/reagent/mutationtoxin = 1, /datum/reagent/toxin/mutagen = 1)
 
 ////////////////////////////////// foam and foam precursor ///////////////////////////////////////////////////
 
@@ -449,70 +210,6 @@
 	results = list(/datum/reagent/acetone = 3)
 	required_reagents = list(/datum/reagent/fuel/oil = 1, /datum/reagent/fuel = 1, /datum/reagent/oxygen = 1)
 
-/datum/chemical_reaction/carpet
-	name = /datum/reagent/carpet
-	id = /datum/reagent/carpet
-	results = list(/datum/reagent/carpet = 2)
-	required_reagents = list(/datum/reagent/drug/space_drugs = 1, /datum/reagent/blood = 1)
-
-/datum/chemical_reaction/carpet/black
-	name = /datum/reagent/carpet/black
-	id = /datum/reagent/carpet/black
-	results = list(/datum/reagent/carpet/black = 2)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/fuel/oil = 1)
-
-/datum/chemical_reaction/carpet/blue
-	name = /datum/reagent/carpet/blue
-	id = /datum/reagent/carpet/blue
-	results = list(/datum/reagent/carpet/blue = 2)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/cryostylane = 1)
-
-/datum/chemical_reaction/carpet/cyan
-	name = /datum/reagent/carpet/cyan
-	id = /datum/reagent/carpet/cyan
-	results = list(/datum/reagent/carpet/cyan = 2)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/toxin/cyanide = 1)
-	//cyan = cyanide get it huehueuhuehuehheuhe
-
-/datum/chemical_reaction/carpet/green
-	name = /datum/reagent/carpet/green
-	id = /datum/reagent/carpet/green
-	results = list(/datum/reagent/carpet/green = 2)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/consumable/ethanol/beer/green = 1)
-	//make green beer by grinding up green crayons and mixing with beer
-
-/datum/chemical_reaction/carpet/orange
-	name = /datum/reagent/carpet/orange
-	id = /datum/reagent/carpet/orange
-	results = list(/datum/reagent/carpet/orange = 2)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/consumable/orangejuice = 1)
-
-/datum/chemical_reaction/carpet/purple
-	name = /datum/reagent/carpet/purple
-	id = /datum/reagent/carpet/purple
-	results = list(/datum/reagent/carpet/purple = 2)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/medicine/regen_jelly = 1)
-	//slimes only party
-
-/datum/chemical_reaction/carpet/red
-	name = /datum/reagent/carpet/red
-	id = /datum/reagent/carpet/red
-	results = list(/datum/reagent/carpet/red = 2)
-	required_reagents = list(/datum/reagent/carpet/ = 1, /datum/reagent/liquidgibs = 1)
-
-/datum/chemical_reaction/carpet/royalblack
-	name = /datum/reagent/carpet/royal/black
-	id = /datum/reagent/carpet/royal/black
-	results = list(/datum/reagent/carpet/royal/black = 2)
-	required_reagents = list(/datum/reagent/carpet/black = 1, /datum/reagent/royal_bee_jelly = 1)
-
-/datum/chemical_reaction/carpet/royalblue
-	name = /datum/reagent/carpet/royal/blue
-	id = /datum/reagent/carpet/royal/blue
-	results = list(/datum/reagent/carpet/royal/blue = 2)
-	required_reagents = list(/datum/reagent/carpet/blue = 1, /datum/reagent/royal_bee_jelly = 1)
-
-
 /datum/chemical_reaction/oil
 	name = "Oil"
 	id = /datum/reagent/fuel/oil
@@ -616,12 +313,6 @@
 	results = list(/datum/reagent/hair_dye = 5)
 	required_reagents = list(/datum/reagent/colorful_reagent = 1, /datum/reagent/uranium/radium = 1, /datum/reagent/drug/space_drugs = 1)
 
-/datum/chemical_reaction/barbers_aid
-	name = /datum/reagent/barbers_aid
-	id = /datum/reagent/barbers_aid
-	results = list(/datum/reagent/barbers_aid = 5)
-	required_reagents = list(/datum/reagent/carpet = 1, /datum/reagent/uranium/radium = 1, /datum/reagent/drug/space_drugs = 1)
-
 /datum/chemical_reaction/concentrated_barbers_aid
 	name = /datum/reagent/concentrated_barbers_aid
 	id = /datum/reagent/concentrated_barbers_aid
@@ -658,17 +349,6 @@
 	results = list(/datum/reagent/consumable/laughter = 10) // Fuck it. I'm not touching this one.
 	required_reagents = list(/datum/reagent/consumable/sugar = 1, /datum/reagent/consumable/banana = 1)
 
-/datum/chemical_reaction/plastic_polymers
-	name = "plastic polymers"
-	id = /datum/reagent/plastic_polymers
-	required_reagents = list(/datum/reagent/fuel/oil = 5, /datum/reagent/toxin/acid = 2, /datum/reagent/ash = 3)
-	required_temp = 374 //lazily consistent with soap & other crafted objects generically created with heat.
-
-/datum/chemical_reaction/plastic_polymers/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
-	for(var/i in 1 to created_volume)
-		new /obj/item/stack/sheet/plastic(location)
-
 /datum/chemical_reaction/pax
 	name = /datum/reagent/pax
 	id = /datum/reagent/pax
@@ -690,16 +370,6 @@
 	required_reagents = list(/datum/reagent/fuel/oil = 3, /datum/reagent/uranium/radium = 2, /datum/reagent/consumable/tinlux =1)
 	required_container = /obj/item/reagent_containers/food/snacks/grown/mushroom/glowshroom
 	mix_message = "The mushroom's insides bubble and pop and it becomes very limp."
-
-/datum/chemical_reaction/slime_extractification
-	name = "slime extractification"
-	id = "slime extractification"
-	required_reagents = list(/datum/reagent/toxin/slimejelly = 30, /datum/reagent/consumable/frostoil = 5, /datum/reagent/toxin/plasma = 5)
-	mix_message = "The mixture condenses into a ball."
-
-/datum/chemical_reaction/slime_extractification/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
-	new /obj/item/slime_extract/grey(location)
 
 /datum/chemical_reaction/cellulose_carbonization
 	name = "Cellulose_Carbonization"

@@ -44,19 +44,23 @@
 		var/used_name = name
 		if(isobserver(user))
 			used_name = real_name
-		if(job)
+		var/used_title = get_role_title()
+		var/display_as_wanderer = FALSE
+		var/is_returning = FALSE
+		if(migrant_type)
+			var/datum/migrant_role/migrant = MIGRANT_ROLE(migrant_type)
+			if(migrant.show_wanderer_examine)
+				display_as_wanderer = TRUE
+		else if(job)
 			var/datum/job/J = SSjob.GetJob(job)
-			var/used_title = J.title
-			if(gender == FEMALE && J.f_title)
-				used_title = J.f_title
-			if(used_title == "Adventurer")
-				used_title = advjob
-				. = list("<span class='info'>ø ------------ ø\nThis is <EM>[used_name]</EM>, the wandering [race_name] [used_title].")
-			else
-				if(islatejoin)
-					. = list("<span class='info'>ø ------------ ø\nThis is <EM>[used_name]</EM>, the returning [race_name] [used_title].")
-				else
-					. = list("<span class='info'>ø ------------ ø\nThis is <EM>[used_name]</EM>, the [race_name] [used_title].")
+			if(J.wanderer_examine)
+				display_as_wanderer = TRUE
+			if(islatejoin)
+				is_returning = TRUE
+		if(display_as_wanderer)
+			. = list("<span class='info'>ø ------------ ø\nThis is <EM>[used_name]</EM>, the wandering [race_name].")
+		else if(used_title)
+			. = list("<span class='info'>ø ------------ ø\nThis is <EM>[used_name]</EM>, the [is_returning ? "returning " : ""][race_name] [used_title].")
 		else
 			. = list("<span class='info'>ø ------------ ø\nThis is the <EM>[used_name]</EM>, the [race_name].")
 
@@ -201,7 +205,7 @@
 	if(!(SLOT_GLASSES in obscured))
 		if(glasses)
 			. += "[m3] [glasses.get_examine_string(user)] covering [m2] eyes."
-		else if(eye_color == BLOODCULT_EYE && iscultist(src) && HAS_TRAIT(src, CULT_EYES))
+		else if(eye_color == BLOODCULT_EYE)
 			. += "<span class='warning'><B>[m2] eyes are glowing an unnatural red!</B></span>"
 
 	//ears
@@ -491,13 +495,6 @@
 		if(R)
 			. += "<span class='deptradio'>Rank:</span> [R.fields["rank"]]\n<a href='?src=[REF(src)];hud=1;photo_front=1'>\[Front photo\]</a><a href='?src=[REF(src)];hud=1;photo_side=1'>\[Side photo\]</a>"
 		if(HAS_TRAIT(user, TRAIT_MEDICAL_HUD))
-			var/cyberimp_detect
-			for(var/obj/item/organ/cyberimp/CI in internal_organs)
-				if(CI.status == ORGAN_ROBOTIC && !CI.syndicate_implant)
-					cyberimp_detect += "[name] is modified with a [CI.name]."
-			if(cyberimp_detect)
-				. += "Detected cybernetic modifications:"
-				. += cyberimp_detect
 			if(R)
 				var/health_r = R.fields["p_stat"]
 				. += "<a href='?src=[REF(src)];hud=m;p_stat=1'>\[[health_r]\]</a>"

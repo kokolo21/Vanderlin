@@ -1,5 +1,5 @@
 // This mode will become the main basis for the typical roguetown round. Based off of chaos mode.
-GLOBAL_LIST_INIT(roguegamemodes, list("Rebellion", "Vampire Lord", "Extended", "Bandits", "CANCEL")) // This is mainly used for forcemgamemodes
+GLOBAL_LIST_INIT(roguegamemodes, list("Rebellion", "Vampire Lord", "Extended", "Bandits", "Lich", "CANCEL")) // This is mainly used for forcemgamemodes
 
 /datum/game_mode/chaosmode
 	name = "roguemode"
@@ -169,6 +169,26 @@ GLOBAL_LIST_INIT(roguegamemodes, list("Rebellion", "Vampire Lord", "Extended", "
 		else
 			return TRUE
 
+/datum/game_mode/chaosmode/proc/pick_lich()
+	restricted_jobs = list("Monarch", "Consort", "Royal Guard", "Guard Captain")
+	antag_candidates = get_players_for_role(ROLE_LICH)
+	var/datum/mind/lichman = pick_n_take(antag_candidates)
+	if(lichman)
+		var/blockme = FALSE
+		if(!(lichman in allantags))
+			blockme = TRUE
+		if(blockme)
+			return
+		allantags -= lichman
+		pre_liches += lichman
+		lichman.special_role = ROLE_LICH
+		lichman.restricted_roles = restricted_jobs.Copy()
+		testing("[key_name(lichman)] has been selected as the [lichman.special_role]")
+		log_game("[key_name(lichman)] has been selected as the [lichman.special_role]")
+	for(var/antag in pre_liches)
+		GLOB.pre_setup_antags |= antag
+	restricted_jobs = list()
+
 /datum/game_mode/chaosmode/proc/pick_bandits()
 	//BANDITS
 	banditgoal = rand(200,400)
@@ -178,9 +198,10 @@ GLOBAL_LIST_INIT(roguegamemodes, list("Rebellion", "Vampire Lord", "Extended", "
 	"Priest")
 	var/num_bandits = 0
 	if(num_players() >= 10)
-		//num_bandits = CLAMP(round(num_players() / 2), 4, 6)
-		num_bandits = 0 //bandits disabled for now
-		//banditgoal += (num_bandits * rand(200,400))
+		var/datum/job/bandit_job = SSjob.GetJob("Bandit")
+		bandit_job.total_positions = num_bandits
+		bandit_job.spawn_positions = num_bandits
+		banditgoal += (num_bandits * rand(200,400))
 
 	if(num_bandits)
 		//antag_candidates = get_players_for_role(ROLE_BANDIT, pre_do=TRUE) //pre_do checks for their preferences since they don't have a job yet
@@ -222,8 +243,7 @@ GLOBAL_LIST_INIT(roguegamemodes, list("Rebellion", "Vampire Lord", "Extended", "
 				allantags -= bandaids
 				pre_bandits += bandaids
 
-				bandaids.assigned_role = "Bandit"
-				bandaids.special_role = ROLE_BANDIT
+				SSjob.AssignRole(bandaids.current, "Bandit")
 
 				bandaids.restricted_roles = restricted_jobs.Copy() // For posterities sake
 				testing("[key_name(bandaids)] has been selected as a bandit")
@@ -414,6 +434,14 @@ GLOBAL_LIST_INIT(roguegamemodes, list("Rebellion", "Vampire Lord", "Extended", "
 			addtimer(CALLBACK(cultist, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
 			GLOB.pre_setup_antags -= cultist
 			cultists += cultist
+
+
+///////////////// LICH
+	for(var/datum/mind/lichman in pre_liches)
+		var/datum/antagonist/new_antag = new /datum/antagonist/lich()
+		addtimer(CALLBACK(lichman, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
+		GLOB.pre_setup_antags -= lichman
+		liches += lichman
 
 ///////////////// WWOLF
 	for(var/datum/mind/werewolf in pre_werewolves)

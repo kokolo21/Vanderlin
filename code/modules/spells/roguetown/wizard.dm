@@ -36,7 +36,7 @@
 	speed = 0.3
 	flag = "magic"
 	light_color = "#ffffff"
-	light_range = 7
+	light_outer_range =  7
 
 /obj/projectile/magic/lightning/on_hit(target)
 	. = ..()
@@ -92,7 +92,7 @@
 	speed = 0.3
 	flag = "magic"
 	light_color = "#802121"
-	light_range = 7
+	light_outer_range =  7
 
 /obj/projectile/magic/bloodlightning/on_hit(target)
 	. = ..()
@@ -144,7 +144,7 @@
 	speed = 0.3
 	flag = "magic"
 	light_color = "#e74141"
-	light_range = 7
+	light_outer_range =  7
 
 /obj/projectile/magic/bloodsteal/on_hit(target)
 	. = ..()
@@ -479,7 +479,7 @@
 	//let's adjust the light power based on our skill, too
 	var/skill_level = user.mind?.get_skill_level(attached_spell.associated_skill)
 	var/mote_power = clamp(4 + (skill_level - 3), 4, 7) // every step above journeyman should get us 1 more tile of brightness
-	mote.light_range = mote_power
+	mote.light_outer_range =  mote_power
 	mote.update_light()
 
 	if (mote.loc == src)
@@ -515,15 +515,7 @@
 	var/skill_level = user.mind?.get_skill_level(attached_spell.associated_skill)
 	cleanspeed = initial(cleanspeed) - (skill_level * 3) // 3 cleanspeed per skill level, from 35 down to a maximum of 17 (pretty quick)
 
-	if (istype(target, /obj/structure/window))
-		user.visible_message(span_notice("[user] gestures at \the [target.name], tiny motes of arcyne power running across its surface..."), span_notice("I begin to clean \the [target.name] with my arcyne power..."))
-		if (do_after(user, src.cleanspeed, target = target))
-			target.remove_atom_colour(WASHABLE_COLOUR_PRIORITY)
-			target.set_opacity(initial(target.opacity))
-			to_chat(user, span_notice("I render \the [target.name] clean."))
-			return TRUE
-		return FALSE
-	else if (istype(target, /obj/effect/decal/cleanable))
+	if (istype(target, /obj/effect/decal/cleanable))
 		user.visible_message(span_notice("[user] gestures at \the [target.name], arcyne power slowly scouring it away..."), span_notice("I begin to scour \the [target.name] away with my arcyne power..."))
 		if (do_after(user, src.cleanspeed, target = target))
 			to_chat(user, span_notice("I expunge \the [target.name] with my mana."))
@@ -547,7 +539,7 @@
 	name = "minor magelight mote"
 	desc = "A tiny display of arcyne power used to illuminate."
 	pixel_x = 20
-	light_range = 4
+	light_outer_range =  4
 	light_color = "#3FBAFD"
 
 //A spell to choose new spells, upon spawning or gaining levels
@@ -570,6 +562,7 @@
 		/obj/effect/proc_holder/spell/invoked/forcewall_weak,
 		/obj/effect/proc_holder/spell/invoked/slowdown_spell_aoe,
 		/obj/effect/proc_holder/spell/invoked/haste,
+		/obj/effect/proc_holder/spell/invoked/findfamiliar,
 //		/obj/effect/proc_holder/spell/invoked/push_spell,
 //		/obj/effect/proc_holder/spell/targeted/ethereal_jaunt,
 //		/obj/effect/proc_holder/spell/aoe_turf/knock,
@@ -853,7 +846,7 @@
 /obj/effect/temp_visual/trap
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "trap"
-	light_range = 2
+	light_outer_range =  2
 	duration = 7
 	layer = ABOVE_ALL_MOB_LAYER //this doesnt render above mobs? it really should
 
@@ -874,6 +867,10 @@
 	sleep(delay)
 	new /obj/effect/temp_visual/blade_burst(T)
 	for(var/mob/living/L in T.contents)
+		var/def_zone = pick(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG)
+		var/obj/item/bodypart/BP = L.get_bodypart(def_zone)
+		L.apply_damage(damage, BRUTE, def_zone)
+		BP.add_wound(/datum/wound/fracture)
 		play_cleave = TRUE
 		L.adjustBruteLoss(damage)
 		playsound(T, "genslash", 80, TRUE)
@@ -1046,6 +1043,35 @@
 
 	return TRUE
 
+/obj/effect/proc_holder/spell/invoked/findfamiliar
+	name = "Find Familiar"
+	desc = "Summons a temporary spectral volf to aid you. Hostile to all but yourself. Summon with care."
+	school = "transmutation"
+	releasedrain = 30
+	chargedrain = 1
+	chargetime = 15
+	charge_max = 40 SECONDS
+	warnie = "spellwarning"
+	no_early_release = TRUE
+	movement_interrupt = FALSE
+	charging_slowdown = 3
+	clothes_req = FALSE
+	active = FALSE
+	sound = 'sound/blank.ogg'
+	overlay_state = "forcewall"
+	range = -1
+	chargedloop = /datum/looping_sound/invokegen
+	associated_skill = /datum/skill/magic/arcane
+	cost = 3
+/mob/living/simple_animal/hostile/retaliate/rogue/wolf/familiar/Initialize(mapload, mob/user)
+	. = ..()
+	if(timeleft)
+		QDEL_IN(src, timeleft) //delete after it runs out, see code/modules/mob/living/simple_animal/rogue/creacher/familiar.dm for timeleft var
+	summoner = user
+/obj/effect/proc_holder/spell/invoked/findfamiliar/cast(list/targets,mob/user = usr)
+	var/turf/target_turf = get_turf(targets[1])
+	new /mob/living/simple_animal/hostile/retaliate/rogue/wolf/familiar(target_turf, user)
+	return TRUE
 
 #undef PRESTI_CLEAN
 #undef PRESTI_SPARK

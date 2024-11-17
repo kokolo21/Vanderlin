@@ -173,12 +173,11 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	if(href_list["refresh"])
 		winshow(src, "stonekeep_prefwin", FALSE)
 		src << browse(null, "window=preferences_browser")
-//		src << browse(null, "window=playersetup") //closes the player setup window
 		new_player_panel()
 
-//	if(href_list["rpprompt"])
-//		do_rp_prompt()
-//		return
+	if(client && client.prefs.is_active_migrant())
+		to_chat(usr, span_boldwarning("You are in the migrant queue."))
+		return
 
 	if(href_list["late_join"])
 		if(!SSticker?.IsRoundInProgress())
@@ -188,11 +187,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 		if(href_list["late_join"] == "override")
 			LateChoices()
 			return
-/*#ifdef MATURESERVER
-		if(key && (world.time < GLOB.respawntimes[key] + RESPAWNTIME))
-			to_chat(usr, "<span class='warning'>I can return in [GLOB.respawntimes[key] + RESPAWNTIME - world.time].</span>")
-			return
-#else*/
+
 
 
 		var/timetojoin = 5 MINUTES
@@ -249,6 +244,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 			if((living_player_count() >= relevant_cap) || (src != SSticker.queued_players[1]))
 				to_chat(usr, "<span class='warning'>Server is full.</span>")
 				return
+
+		if(client && client.prefs.is_active_migrant())
+			to_chat(usr, span_boldwarning("You are in the migrant queue."))
+			return
 
 		AttemptLateSpawn(href_list["SelectedJob"])
 		return
@@ -453,10 +452,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	SSticker.queued_players -= src
 	SSticker.queue_delay = 4
 
-	// Jus remove them from drifter queue if they were in it.
-	// This shit shouldn't be firing before the round starts anyways sooo this is one of the only ways in
-	SSrole_class_handler.cleanup_drifter_queue(client)
-
 	testing("basedtest 1")
 
 	SSjob.AssignRole(src, rank, 1)
@@ -489,38 +484,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	var/mob/living/carbon/human/humanc
 	if(ishuman(character))
 		humanc = character	//Let's retypecast the var to be human,
-/*
-	if(humanc)	//These procs all expect humans
-		GLOB.data_core.manifest_inject(humanc)
-		if(SSshuttle.arrivals)
-			SSshuttle.arrivals.QueueAnnounce(humanc, rank)
-		else
-			AnnounceArrival(humanc, rank)
-		AddEmploymentContract(humanc)
-		if(GLOB.highlander)
-			to_chat(humanc, "<span class='danger'><i>THERE CAN BE ONLY ONE!!!</i></span>")
-			humanc.make_scottish()
-
-		if(GLOB.summon_guns_triggered)
-			give_guns(humanc)
-		if(GLOB.summon_magic_triggered)
-			give_magic(humanc)
-		if(GLOB.curse_of_madness_triggered)
-			give_madness(humanc, GLOB.curse_of_madness_triggered)
-*/
 	GLOB.joined_player_list += character.ckey
-/*
-	if(CONFIG_GET(flag/allow_latejoin_antagonists) && humanc)	//Borgs aren't allowed to be antags. Will need to be tweaked if we get true latejoin ais.
-		if(SSshuttle.emergency)
-			switch(SSshuttle.emergency.mode)
-				if(SHUTTLE_RECALL, SHUTTLE_IDLE)
-					SSticker.mode.make_antag_chance(humanc)
-				if(SHUTTLE_CALL)
-					if(SSshuttle.emergency.timeLeft(1) > initial(SSshuttle.emergencyCallTime)*0.5)
-						SSticker.mode.make_antag_chance(humanc)
-
-	if(humanc && CONFIG_GET(flag/roundstart_traits))
-		SSquirks.AssignQuirks(humanc, humanc.client, TRUE)*/
 	if(humanc)
 		var/fakekey = character.ckey
 		if(character.ckey in GLOB.anonymize)
@@ -536,13 +500,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 		GLOB.respawncounts[character.ckey] = 1
 //	add_roundplayed(character.ckey)
 	log_manifest(character.mind.key,character.mind,character,latejoin = TRUE)
-
-/mob/dead/new_player/proc/AddEmploymentContract(mob/living/carbon/human/employee)
-	//TODO:  figure out a way to exclude wizards/nukeops/demons from this.
-	for(var/C in GLOB.employmentCabinets)
-		var/obj/structure/filingcabinet/employment/employmentCabinet = C
-		if(!employmentCabinet.virgin)
-			employmentCabinet.addFile(employee)
 
 
 /mob/dead/new_player/proc/LateChoices()
@@ -693,12 +650,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	return
 
 /mob/living/carbon/human/after_creation()
-#ifdef MATURESERVER
-	if(gender == MALE)
-		sexcon = new/datum/sex_controller/male(src)
-	else
-		sexcon = new/datum/sex_controller/female(src)
-#endif
 	if(dna?.species)
 		dna.species.after_creation(src)
 	roll_stats()
@@ -707,7 +658,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	. = new_character
 	if(.)
 		new_character.key = key		//Manually transfer the key to log them in
-		new_character.can_do_sex()
 		new_character.stop_sound_channel(CHANNEL_LOBBYMUSIC)
 		var/area/joined_area = get_area(new_character.loc)
 		if(joined_area)
@@ -735,7 +685,6 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	src << browse(null, "window=latechoices") //closes late job selection
 
 	SStriumphs.remove_triumph_buy_menu(client)
-	SSrole_class_handler.cleanup_drifter_queue(client)
 
 	winshow(src, "stonekeep_prefwin", FALSE)
 	src << browse(null, "window=preferences_browser")

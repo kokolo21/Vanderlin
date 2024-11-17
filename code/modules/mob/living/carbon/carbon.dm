@@ -133,12 +133,6 @@
 /mob/living/carbon/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	. = ..()
 	var/hurt = TRUE
-	if(istype(throwingdatum, /datum/thrownthing))
-		var/datum/thrownthing/D = throwingdatum
-		if(iscyborg(D.thrower))
-			var/mob/living/silicon/robot/R = D.thrower
-			if(!R.emagged)
-				hurt = FALSE
 	if(hit_atom.density && isturf(hit_atom))
 		if(hurt)
 			Paralyze(20)
@@ -290,10 +284,6 @@
 		dat += "<BR><B>[get_held_index_name(i)]:</B> </td><td><A href='?src=[REF(src)];item=[SLOT_HANDS];hand_index=[i]'>[(I && !(I.item_flags & ABSTRACT)) ? I : "Nothing"]</a>"
 
 	dat += "<BR><B>Back:</B> <A href='?src=[REF(src)];item=[SLOT_BACK]'>[back ? back : "Nothing"]</A>"
-
-
-	if(istype(wear_mask, /obj/item/clothing/mask) && istype(back, /obj/item/tank))
-		dat += "<BR><A href='?src=[REF(src)];internal=1'>[internal ? "Disable Internals" : "Set Internals"]</A>"
 
 	if(handcuffed)
 		dat += "<BR><A href='?src=[REF(src)];item=[SLOT_HANDCUFFED]'>Handcuffed</A>"
@@ -530,12 +520,6 @@
 
 /mob/living/carbon/Stat()
 	..()
-	if(statpanel("Status"))
-		var/obj/item/organ/alien/plasmavessel/vessel = getorgan(/obj/item/organ/alien/plasmavessel)
-		if(vessel)
-			stat(null, "Plasma Stored: [vessel.storedPlasma]/[vessel.max_plasma]")
-		if(locate(/obj/item/assembly/health) in src)
-			stat(null, "Health: [health]")
 	add_abilities_to_panel()
 
 /mob/living/carbon/attack_ui(slot)
@@ -601,11 +585,10 @@
 		else
 			if(message)
 				visible_message("<span class='danger'>[src] pukes!</span>", "<span class='danger'>I puke!</span>")
-				if(!isflyperson(src))
-					SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "vomit", /datum/mood_event/vomit)
-					if(iscarbon(src))
-						var/mob/living/carbon/C = src
-						C.add_stress(/datum/stressevent/vomit)
+				SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "vomit", /datum/mood_event/vomit)
+				if(iscarbon(src))
+					var/mob/living/carbon/C = src
+					C.add_stress(/datum/stressevent/vomit)
 	else
 		if(NOBLOOD in dna?.species?.species_traits)
 			return TRUE
@@ -1044,10 +1027,6 @@
 	var/obj/item/organ/brain/B = getorgan(/obj/item/organ/brain)
 	if(B)
 		B.brain_death = FALSE
-	for(var/thing in diseases)
-		var/datum/disease/D = thing
-		if(D.severity != DISEASE_SEVERITY_POSITIVE)
-			D.cure(FALSE)
 	var/datum/component/rot/corpse/CR = GetComponent(/datum/component/rot/corpse)
 	if(CR)
 		CR.amount = 0
@@ -1074,7 +1053,7 @@
 
 /mob/living/carbon/can_be_revived()
 	. = ..()
-	if(!getorgan(/obj/item/organ/brain) && (!mind || !mind.has_antag_datum(/datum/antagonist/changeling)))
+	if(!getorgan(/obj/item/organ/brain) && (!mind))
 		testing("norescarbon")
 		return 0
 

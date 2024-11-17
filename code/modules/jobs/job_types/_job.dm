@@ -29,6 +29,9 @@
 	//How many players have this job
 	var/current_positions = 0
 
+	//Whether this job clears a slot when you get a rename prompt.
+	var/antag_job = FALSE
+
 	//Supervisors, who this person answers to directly
 	var/supervisors = ""
 
@@ -97,6 +100,8 @@
 
 	var/show_in_credits = TRUE
 
+	var/announce_latejoin = TRUE
+
 	var/give_bank_account = FALSE
 
 	var/can_random = TRUE
@@ -119,18 +124,19 @@
 	You will still need to contact the subsystem though
 */
 	var/list/advclass_cat_rolls
-/*
-	Basically this is just a ref to a drifter wave if its attached to one
-	The role class handler will grab relevant data out of it it uses a class select
-	Just make sure to unattach afterward we are done.
-*/
-	var/datum/drifter_wave/drifter_wave_attachment
 
+	var/wanderer_examine = FALSE
 
 /datum/job/proc/special_job_check(mob/dead/new_player/player)
 	return TRUE
 
+/client/proc/job_greet(datum/job/greeting_job)
+	if(mob.job == greeting_job.title)
+		greeting_job.greet(mob)
+
 /datum/job/proc/greet(mob/player)
+	if(player?.mind?.assigned_role != title)
+		return
 	if(!job_greet_text)
 		return
 	to_chat(player, span_notice("You are the <b>[title]</b>"))
@@ -224,8 +230,6 @@
 		GLOB.credits_icons[thename]["vc"] = voice_color
 
 /datum/job/proc/announce(mob/living/carbon/human/H)
-	if(head_announce)
-		announce_head(H, head_announce)
 
 /datum/job/proc/override_latejoin_spawn(mob/living/carbon/human/H)		//Return TRUE to force latejoining to not automatically place the person in latejoin shuttle/whatever.
 	return FALSE
@@ -282,11 +286,6 @@
 	if(CONFIG_GET(flag/everyone_has_maint_access)) //Config has global maint access set
 		. |= list(ACCESS_MAINT_TUNNELS)
 
-/datum/job/proc/announce_head(mob/living/carbon/human/H, channels) //tells the given channel that the given mob is the new department head. See communications.dm for valid channels.
-	if(H && GLOB.announcement_systems.len)
-		//timer because these should come after the captain announcement
-		SSticker.OnRoundstart(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(addtimer), CALLBACK(pick(GLOB.announcement_systems), TYPE_PROC_REF(/obj/machinery/announcement_system, announce), "NEWHEAD", H.real_name, H.job, channels), 1))
-
 //If the configuration option is set to require players to be logged as old enough to play certain jobs, then this proc checks that they are, otherwise it just returns 1
 /datum/job/proc/player_old_enough(client/C)
 	if(available_in_days(C) == 0)
@@ -312,53 +311,13 @@
 /datum/job/proc/map_check()
 	return TRUE
 
-/datum/job/proc/radio_help_message(mob/M)
-	to_chat(M, "<b>Prefix your message with :h to speak on your department's radio. To see other prefixes, look closely at your headset.</b>")
-
 /datum/outfit/job
 	name = "Standard Gear"
 
 	var/jobtype = null
 
-	uniform = /obj/item/clothing/under/color/grey
-	id = /obj/item/card/id
-	ears = /obj/item/radio/headset
-	belt = /obj/item/pda
 	back = /obj/item/storage/backpack
-	shoes = /obj/item/clothing/shoes/sneakers/black
-	box = /obj/item/storage/box/survival
 
-	var/backpack = /obj/item/storage/backpack
-	var/satchel  = /obj/item/storage/backpack/satchel
-	var/duffelbag = /obj/item/storage/backpack/duffelbag
-
-	var/pda_slot = SLOT_BELT
-
-/datum/outfit/job/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	..()
-/*	switch(H.backpack)
-		if(GBACKPACK)
-			back = /obj/item/storage/backpack //Grey backpack
-		if(GSATCHEL)
-			back = /obj/item/storage/backpack/satchel //Grey satchel
-		if(GDUFFELBAG)
-			back = /obj/item/storage/backpack/duffelbag //Grey Duffel bag
-		if(LSATCHEL)
-			back = /obj/item/storage/backpack/satchel/leather //Leather Satchel
-		if(DSATCHEL)
-			back = satchel //Department satchel
-		if(DDUFFELBAG)
-			back = duffelbag //Department duffel bag
-		else
-			back = backpack //Department backpack
-
-	//converts the uniform string into the path we'll wear, whether it's the skirt or regular variant
-	var/holder
-	if(H.jumpsuit_style == PREF_SKIRT)
-		holder = "[uniform]"
-	else
-		holder = "[uniform]"
-	uniform = text2path(holder)*/
 
 /datum/outfit/job/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(visualsOnly)
@@ -367,37 +326,6 @@
 	var/datum/job/J = SSjob.GetJobType(jobtype)
 	if(!J)
 		J = SSjob.GetJob(H.job)
-
-	var/obj/item/card/id/C = H.wear_ring
-	if(istype(C))
-		if(J)
-			C.access = J.get_access()
-			C.assignment = J.title
-		shuffle_inplace(C.access) // Shuffle access list to make NTNet passkeys less predictable
-		C.registered_name = H.real_name
-		C.update_label()
-		for(var/A in SSeconomy.bank_accounts)
-			var/datum/bank_account/B = A
-			if(B.account_id == H.account_id)
-				C.registered_account = B
-				B.bank_cards += C
-				break
-		H.sec_hud_set_ID()
-
-	var/obj/item/pda/PDA = H.get_item_by_slot(pda_slot)
-	if(istype(PDA))
-		PDA.owner = H.real_name
-		if(J)
-			PDA.ownjob = J.title
-		PDA.update_label()
-
-/datum/outfit/job/get_chameleon_disguise_info()
-	var/list/types = ..()
-	types -= /obj/item/storage/backpack //otherwise this will override the actual backpacks
-	types += backpack
-	types += satchel
-	types += duffelbag
-	return types
 
 //Warden and regular officers add this result to their get_access()
 /datum/job/proc/check_config_for_sec_maint()

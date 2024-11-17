@@ -155,12 +155,12 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 
 /datum/outfit/job/roguetown/vamplord/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank(/datum/skill/magic/blood, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 5, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/reading, 5, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/magic/blood, 2, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 5, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/reading, 5, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
 	pants = /obj/item/clothing/under/roguetown/tights/black
 	shirt = /obj/item/clothing/suit/roguetown/shirt/vampire
 	belt = /obj/item/storage/belt/rogue/leather/plaquegold
@@ -546,7 +546,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 
 /obj/structure/vampire/portal/Initialize()
 	. = ..()
-	set_light(3, 20, LIGHT_COLOR_BLOOD_MAGIC)
+	set_light(3, 3, 20, l_color = LIGHT_COLOR_BLOOD_MAGIC)
 	playsound(loc, 'sound/misc/portalopen.ogg', 100, FALSE, pressure_affected = FALSE)
 	addtimer(CALLBACK(src, PROC_REF(close_portal)), 1 MINUTES)
 
@@ -561,7 +561,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 
 /obj/structure/vampire/bloodpool/Initialize()
 	. = ..()
-	set_light(3, 20, LIGHT_COLOR_BLOOD_MAGIC)
+	set_light(3, 3, 20, l_color = LIGHT_COLOR_BLOOD_MAGIC)
 
 /obj/structure/vampire/bloodpool/examine(mob/user)
 	. = ..()

@@ -31,17 +31,6 @@
 		transform *= TRANSFORM_USING_VARIABLE(seed.potency, 100) + 0.5
 		add_juice()
 
-
-/obj/item/grown/attackby(obj/item/O, mob/user, params)
-	..()
-	if (istype(O, /obj/item/plant_analyzer))
-		var/msg = "<span class='info'>*---------*\n This is \a <span class='name'>[src]</span>\n"
-		if(seed)
-			msg += seed.get_analyzer_text()
-		msg += "</span>"
-		to_chat(usr, msg)
-		return
-
 /obj/item/grown/proc/add_juice()
 	if(reagents)
 		return 1
@@ -53,7 +42,7 @@
 			for(var/datum/plant_gene/trait/T in seed.genes)
 				T.on_throw_impact(src, hit_atom)
 
-/obj/item/grown/microwave_act(obj/machinery/microwave/M)
+/obj/item/grown/heating_act()
 	return
 
 /obj/item/grown/on_grind()

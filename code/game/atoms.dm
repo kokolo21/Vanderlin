@@ -160,7 +160,7 @@
 	if(color)
 		add_atom_colour(color, FIXED_COLOUR_PRIORITY)
 
-	if (light_power && light_range)
+	if (light_system == STATIC_LIGHT && light_power && (light_inner_range || light_outer_range))
 		update_light()
 
 	if (opacity && isturf(loc))
@@ -429,8 +429,6 @@
  */
 /atom/proc/emp_act(severity)
 	var/protection = SEND_SIGNAL(src, COMSIG_ATOM_EMP_ACT, severity)
-	if(!(protection & EMP_PROTECT_WIRES) && istype(wires))
-		wires.emp_pulse()
 	return protection // Pass the protection value collected here upwards
 
 /**
@@ -572,15 +570,6 @@
 	contents_explosion(severity, target)
 	SEND_SIGNAL(src, COMSIG_ATOM_EX_ACT, severity, target)
 
-/**
- * React to a hit by a blob objecd
- *
- * default behaviour is to send the COMSIG_ATOM_BLOB_ACT signal
- */
-/atom/proc/blob_act(obj/structure/blob/B)
-	SEND_SIGNAL(src, COMSIG_ATOM_BLOB_ACT, B)
-	return
-
 /atom/proc/fire_act(added, maxstacks)
 	SEND_SIGNAL(src, COMSIG_ATOM_FIRE_ACT, added, maxstacks)
 	return
@@ -629,12 +618,6 @@
 		blood_dna["UNKNOWN DNA"] = "X*"
 	return blood_dna
 
-/mob/living/carbon/alien/get_blood_dna_list()
-	return list("UNKNOWN DNA" = "X*")
-
-/mob/living/silicon/get_blood_dna_list()
-	return list("MOTOR OIL" = "SAE 5W-30") //just a little flavor text.
-
 ///to add a mob's dna info into an object's blood_dna list.
 /atom/proc/transfer_mob_blood_dna(mob/living/L)
 	// Returns 0 if we have that blood already
@@ -654,13 +637,6 @@
 		return FALSE
 	return add_blood_DNA(blood_dna)
 
-///Is this atom in space
-/atom/proc/isinspace()
-	if(isspaceturf(get_turf(src)))
-		return TRUE
-	else
-		return FALSE
-
 ///Called when gravity returns after floating I think
 /atom/proc/handle_fall()
 	return
@@ -674,8 +650,7 @@
  *
  * Default behaviour is to send COMSIG_ATOM_SING_PULL and return
  */
-/atom/proc/singularity_pull(obj/singularity/S, current_size)
-	SEND_SIGNAL(src, COMSIG_ATOM_SING_PULL, S, current_size)
+/atom/proc/singularity_pull()
 
 
 /**
@@ -709,21 +684,6 @@
  */
 /atom/proc/narsie_act()
 	SEND_SIGNAL(src, COMSIG_ATOM_NARSIE_ACT)
-
-
-///Return the values you get when an RCD eats you?
-/atom/proc/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	return FALSE
-
-
-/**
- * Respond to an RCD acting on our item
- *
- * Default behaviour is to send COMSIG_ATOM_RCD_ACT and return FALSE
- */
-/atom/proc/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	SEND_SIGNAL(src, COMSIG_ATOM_RCD_ACT, user, the_rcd, passed_mode)
-	return FALSE
 
 /**
  * Implement the behaviour for when a user click drags a storage object to your atom
@@ -814,10 +774,6 @@
 /atom/proc/setDir(newdir)
 	SEND_SIGNAL(src, COMSIG_ATOM_DIR_CHANGE, dir, newdir)
 	dir = newdir
-
-///Handle melee attack by a mech
-/atom/proc/mech_melee_attack(obj/mecha/M)
-	return
 
 /**
  * Called when the atom log's in or out
@@ -1268,17 +1224,7 @@
 			max_grav = max(max_grav, i)
 		return max_grav
 
-	if(isspaceturf(T)) // Turf never has gravity
-		return 0
-
 	var/area/A = get_area(T)
 	if(A.has_gravity) // Areas which always has gravity
 		return A.has_gravity
-	else
-		// There's a gravity generator on our z level
-		if(GLOB.gravity_generators["[T.z]"])
-			var/max_grav = 0
-			for(var/obj/machinery/gravity_generator/main/G in GLOB.gravity_generators["[T.z]"])
-				max_grav = max(G.setting,max_grav)
-			return max_grav
 	return SSmapping.level_trait(T.z, ZTRAIT_GRAVITY)

@@ -31,8 +31,10 @@
 	race = /datum/species/goblin/hell
 /mob/living/carbon/human/species/goblin/npc/hell
 	race = /datum/species/goblin/hell
+
 /mob/living/carbon/human/species/goblin/npc/ambush/hell
 	race = /datum/species/goblin/hell
+
 /datum/species/goblin/hell
 	name = "hell goblin"
 	id = "goblin_hell"
@@ -41,10 +43,13 @@
 /mob/living/carbon/human/species/goblin/cave
 	name = "cave goblin"
 	race = /datum/species/goblin/cave
+
 /mob/living/carbon/human/species/goblin/npc/cave
 	race = /datum/species/goblin/cave
+
 /mob/living/carbon/human/species/goblin/npc/ambush/cave
 	race = /datum/species/goblin/cave
+
 /datum/species/goblin/cave
 	id = "goblin_cave"
 	raceicon = "goblin_cave"
@@ -110,7 +115,7 @@
 	sexes = 1
 	offset_features = list(OFFSET_HANDS = list(0,-4), OFFSET_HANDS_F = list(0,-4))
 	damage_overlay_type = ""
-	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | ERT_SPAWN | RACE_SWAP | SLIME_EXTRACT
+	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | RACE_SWAP | SLIME_EXTRACT
 	var/raceicon = "goblin"
 
 /datum/species/goblin/regenerate_icons(mob/living/carbon/human/H)
@@ -198,7 +203,6 @@
 /mob/living/carbon/human/species/goblin/after_creation()
 	..()
 	gender = MALE
-	QDEL_NULL(sexcon)
 	if(src.dna && src.dna.species)
 		src.dna.species.soundpack_m = new /datum/voicepack/goblin()
 		src.dna.species.soundpack_f = new /datum/voicepack/goblin()

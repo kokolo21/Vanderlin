@@ -150,32 +150,6 @@
 			playsound(loc, 'sound/blank.ogg', 50, TRUE, -1)
 
 
-/mob/living/simple_animal/attack_alien(mob/living/carbon/alien/humanoid/M)
-	if(..()) //if harm or disarm intent.
-		if(M.used_intent.type == INTENT_DISARM)
-			playsound(loc, 'sound/blank.ogg', 25, TRUE, -1)
-			visible_message("<span class='danger'>[M] [response_disarm_continuous] [name]!</span>", \
-							"<span class='danger'>[M] [response_disarm_continuous] you!</span>", null, COMBAT_MESSAGE_RANGE, M)
-			to_chat(M, "<span class='danger'>I [response_disarm_simple] [name]!</span>")
-			log_combat(M, src, "disarmed")
-		else
-			var/damage = rand(15, 30)
-			visible_message("<span class='danger'>[M] slashes at [src]!</span>", \
-							"<span class='danger'>You're slashed at by [M]!</span>", null, COMBAT_MESSAGE_RANGE, M)
-			to_chat(M, "<span class='danger'>I slash at [src]!</span>")
-			playsound(loc, 'sound/blank.ogg', 25, TRUE, -1)
-			attack_threshold_check(damage)
-			log_combat(M, src, "attacked")
-		return 1
-
-/mob/living/simple_animal/attack_larva(mob/living/carbon/alien/larva/L)
-	. = ..()
-	if(. && stat != DEAD) //successful larva bite
-		var/damage = rand(5, 10)
-		. = attack_threshold_check(damage)
-		if(.)
-			L.amount_grown = min(L.amount_grown + damage, L.max_grown)
-
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	. = ..()
 	if(.)
@@ -228,18 +202,6 @@
 			target.mind.attackedme[user.real_name] = world.time
 		user.rogfat_add(15)
 
-/mob/living/simple_animal/attack_slime(mob/living/simple_animal/slime/M)
-	if(..()) //successful slime attack
-		var/damage = rand(15, 25)
-		if(M.is_adult)
-			damage = rand(20, 35)
-		return attack_threshold_check(damage)
-
-/mob/living/simple_animal/attack_drone(mob/living/simple_animal/drone/M)
-	if(M.used_intent.type == INTENT_HARM) //No kicking dogs even as a rogue drone. Use a weapon.
-		return
-	return ..()
-
 /mob/living/simple_animal/proc/attack_threshold_check(damage, damagetype = BRUTE, armorcheck = "melee")
 	var/temp_damage = damage
 	if(!damage_coeff[damagetype])
@@ -282,10 +244,6 @@
 			if(prob(bomb_armor))
 				bloss = bloss / 1.5
 			adjustBruteLoss(bloss)
-
-/mob/living/simple_animal/blob_act(obj/structure/blob/B)
-	adjustBruteLoss(20)
-	return
 
 /mob/living/simple_animal/do_attack_animation(atom/A, visual_effect_icon, used_item, no_effect)
 	if(!no_effect && !visual_effect_icon && melee_damage_upper)

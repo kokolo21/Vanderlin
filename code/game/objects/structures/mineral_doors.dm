@@ -26,7 +26,6 @@
 	var/openSound = 'sound/blank.ogg'
 	var/closeSound = 'sound/blank.ogg'
 
-	var/sheetType = /obj/item/stack/sheet/metal //what we're made of
 	var/sheetAmount = 7 //how much we drop when deconstructed
 
 	var/windowed = FALSE
@@ -190,13 +189,6 @@
 						addtimer(CALLBACK(src, PROC_REF(Close), FALSE), 25)
 
 
-/obj/structure/mineral_door/attack_ai(mob/user) //those aren't machinery, they're just big fucking slabs of a mineral
-	if(isAI(user)) //so the AI can't open it
-		return
-	else if(iscyborg(user)) //but cyborgs can
-		if(get_dist(user,src) <= 1) //not remotely though
-			return TryToSwitchState(user)
-
 /obj/structure/mineral_door/attack_paw(mob/user)
 	return attack_hand(user)
 
@@ -249,8 +241,6 @@
 						SwitchState()
 			else
 				SwitchState()
-	else if(ismecha(user))
-		SwitchState()
 	return TRUE
 
 /obj/structure/mineral_door/proc/SwitchState(silent = FALSE)
@@ -371,7 +361,7 @@
 				user.visible_message(span_notice("[user] repaired [src]."), \
 				span_notice("I repaired [src]."))
 
-/obj/structure/mineral_door/proc/trykeylock(obj/item/I, mob/user)
+/obj/structure/mineral_door/proc/trykeylock(obj/item/I, mob/user, is_right = FALSE)
 	if(door_opened || isSwitchingStates)
 		return
 	if(!keylock)
@@ -402,7 +392,7 @@
 	else
 		var/obj/item/roguekey/K = I
 		if(K.lockhash == lockhash)
-			lock_toggle(user)
+			lock_toggle(user, is_right)
 			return
 		else
 			playsound(src, rattlesound, 100)
@@ -411,6 +401,13 @@
 			animate(pixel_x = oldx-1, time = 0.5)
 			animate(pixel_x = oldx, time = 0.5)
 		return
+
+/obj/structure/mineral_door/attack_right(mob/user)
+	if(istype(user.get_active_held_item(), /obj/item/roguekey))
+		var/obj/item/roguekey/held = user.get_active_held_item()
+		trykeylock(held, user, TRUE)
+		return
+	. = ..()
 
 /obj/structure/mineral_door/proc/trypicklock(obj/item/I, mob/user)
 	if(door_opened || isSwitchingStates)
@@ -471,15 +468,15 @@
 				continue
 		return
 
-/obj/structure/mineral_door/proc/lock_toggle(mob/user)
+/obj/structure/mineral_door/proc/lock_toggle(mob/user, is_right = FALSE)
 	if(isSwitchingStates || door_opened)
 		return
-	if(locked)
+	if(locked && is_right)
 		user.visible_message(span_warning("[user] unlocks [src]."), \
 			span_notice("I unlock [src]."))
 		playsound(src, unlocksound, 100)
 		locked = 0
-	else
+	else if(!is_right && !locked)
 		user.visible_message(span_warning("[user] locks [src]."), \
 			span_notice("I lock [src]."))
 		playsound(src, locksound, 100)
@@ -554,151 +551,6 @@
 	user.visible_message(span_notice("[user] pried [src] into pieces!"), span_notice("I pried apart [src]!"))
 	deconstruct(TRUE)
 
-
-/////////////////////// END TOOL OVERRIDES ///////////////////////
-/*
-
-/obj/structure/mineral_door/deconstruct(disassembled = TRUE)
-//	var/turf/T = get_turf(src)
-//	if(disassembled)
-//		new sheetType(T, sheetAmount)
-//	else
-//		new sheetType(T, max(sheetAmount - 2, 1))
-//	qdel(src)
-*/
-
-
-/obj/structure/mineral_door/iron
-	name = "iron door"
-	max_integrity = 300
-
-/obj/structure/mineral_door/silver
-	name = "silver door"
-	icon_state = "silver"
-	sheetType = /obj/item/stack/sheet/mineral/silver
-	max_integrity = 300
-	rad_insulation = RAD_HEAVY_INSULATION
-
-/obj/structure/mineral_door/gold
-	name = "gold door"
-	icon_state = "gold"
-	sheetType = /obj/item/stack/sheet/mineral/gold
-	rad_insulation = RAD_HEAVY_INSULATION
-
-/obj/structure/mineral_door/uranium
-	name = "uranium door"
-	icon_state = "uranium"
-	sheetType = /obj/item/stack/sheet/mineral/uranium
-	max_integrity = 300
-	light_range = 2
-
-/obj/structure/mineral_door/uranium/ComponentInitialize()
-	return
-
-/obj/structure/mineral_door/sandstone
-	name = "sandstone door"
-	icon_state = "sandstone"
-	sheetType = /obj/item/stack/sheet/mineral/sandstone
-	max_integrity = 100
-
-/obj/structure/mineral_door/transparent
-	opacity = FALSE
-	rad_insulation = RAD_VERY_LIGHT_INSULATION
-
-/obj/structure/mineral_door/transparent/Close()
-	..()
-	set_opacity(FALSE)
-
-/obj/structure/mineral_door/transparent/plasma
-	name = "plasma door"
-	icon_state = "plasma"
-	sheetType = /obj/item/stack/sheet/mineral/plasma
-
-/obj/structure/mineral_door/transparent/plasma/ComponentInitialize()
-	return
-
-/obj/structure/mineral_door/transparent/plasma/welder_act(mob/living/user, obj/item/I)
-	return
-
-/obj/structure/mineral_door/transparent/plasma/attackby(obj/item/W, mob/user, params)
-	if(W.get_temperature())
-		var/turf/T = get_turf(src)
-		message_admins("Plasma mineral door ignited by [ADMIN_LOOKUPFLW(user)] in [ADMIN_VERBOSEJMP(T)]")
-		log_game("Plasma mineral door ignited by [key_name(user)] in [AREACOORD(T)]")
-		TemperatureAct()
-	else
-		return ..()
-
-/obj/structure/mineral_door/transparent/plasma/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > 300)
-		TemperatureAct()
-
-/obj/structure/mineral_door/transparent/plasma/proc/TemperatureAct()
-	atmos_spawn_air("plasma=500;TEMP=1000")
-	deconstruct(FALSE)
-
-/obj/structure/mineral_door/transparent/diamond
-	name = "diamond door"
-	icon_state = "diamond"
-	sheetType = /obj/item/stack/sheet/mineral/diamond
-	max_integrity = 1000
-	rad_insulation = RAD_EXTREME_INSULATION
-
-
-
-
-/obj/structure/mineral_door/paperframe
-	name = "paper frame door"
-	icon_state = "paperframe"
-	openSound = 'sound/foley/doors/creak.ogg'
-	closeSound = 'sound/foley/doors/shut.ogg'
-	sheetType = /obj/item/stack/sheet/paperframes
-	sheetAmount = 3
-	resistance_flags = FLAMMABLE
-	max_integrity = 20
-
-/obj/structure/mineral_door/paperframe/Initialize()
-	. = ..()
-	queue_smooth_neighbors(src)
-
-/obj/structure/mineral_door/paperframe/examine(mob/user)
-	. = ..()
-	if(obj_integrity < max_integrity)
-		. += span_info("It looks a bit damaged, you may be able to fix it with some <b>paper</b>.")
-
-/obj/structure/mineral_door/paperframe/pickaxe_door(mob/living/user, obj/item/I)
-	return
-
-/obj/structure/mineral_door/paperframe/welder_act(mob/living/user, obj/item/I)
-	return
-
-/obj/structure/mineral_door/paperframe/crowbar_act(mob/living/user, obj/item/I)
-	return crowbar_door(user, I)
-
-/obj/structure/mineral_door/paperframe/attackby(obj/item/I, mob/living/user)
-	if(I.get_temperature()) //BURN IT ALL DOWN JIM
-		fire_act(I.get_temperature())
-		return
-
-	if((user.used_intent.type != INTENT_HARM) && istype(I, /obj/item/paper) && (obj_integrity < max_integrity))
-		user.visible_message(span_notice("[user] starts to patch the holes in [src]."), span_notice("I start patching some of the holes in [src]!"))
-		if(do_after(user, 20, TRUE, src))
-			obj_integrity = min(obj_integrity+4,max_integrity)
-			qdel(I)
-			user.visible_message(span_notice("[user] patches some of the holes in [src]."), span_notice("I patch some of the holes in [src]!"))
-			return TRUE
-
-	return ..()
-
-/obj/structure/mineral_door/paperframe/ComponentInitialize()
-	return
-
-/obj/structure/mineral_door/paperframe/Destroy()
-	queue_smooth_neighbors(src)
-	return ..()
-
-
-
 //ROGUEDOOR
 
 /obj/structure/mineral_door/wood
@@ -707,7 +559,6 @@
 	icon_state = "woodhandle"
 	openSound = list('sound/foley/doors/creak.ogg')
 	closeSound = 'sound/foley/doors/shut.ogg'
-	sheetType = null
 	resistance_flags = FLAMMABLE
 	max_integrity = 1000
 	damage_deflection = 12
@@ -768,7 +619,6 @@
 	icon_state = "woodhandle"
 	openSound = 'sound/foley/doors/creak.ogg'
 	closeSound = 'sound/foley/doors/shut.ogg'
-	sheetType = null
 	resistance_flags = FLAMMABLE
 	max_integrity = 1000
 	damage_deflection = 12
@@ -820,6 +670,10 @@
 	icon_state = base_state
 
 /obj/structure/mineral_door/wood/deadbolt/attack_right(mob/user)
+	if(istype(user.get_active_held_item(), /obj/item/roguekey))
+		var/obj/item/roguekey/held = user.get_active_held_item()
+		trykeylock(held, user, TRUE)
+		return
 	if(door_opened || isSwitchingStates)
 		return
 	if(lockbroken)
@@ -862,6 +716,10 @@
 	repair_skill = /datum/skill/craft/masonry
 
 /obj/structure/mineral_door/wood/donjon/stone/attack_right(mob/user)
+	if(istype(user.get_active_held_item(), /obj/item/roguekey))
+		var/obj/item/roguekey/held = user.get_active_held_item()
+		trykeylock(held, user, TRUE)
+		return
 	return
 
 /obj/structure/mineral_door/wood/donjon/stone/view_toggle(mob/user)
@@ -873,6 +731,10 @@
 	..()
 
 /obj/structure/mineral_door/wood/donjon/attack_right(mob/user)
+	if(istype(user.get_active_held_item(), /obj/item/roguekey))
+		var/obj/item/roguekey/held = user.get_active_held_item()
+		trykeylock(held, user, TRUE)
+		return
 	if(door_opened || isSwitchingStates)
 		return
 	if(brokenstate)
@@ -913,7 +775,6 @@
 	opacity = FALSE
 	windowed = TRUE
 	keylock = TRUE
-	sheetType = null
 	locksound = 'sound/foley/doors/lock.ogg'
 	unlocksound = 'sound/foley/doors/unlock.ogg'
 	rattlesound = 'sound/foley/doors/lockrattlemetal.ogg'

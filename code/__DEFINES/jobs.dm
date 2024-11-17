@@ -143,7 +143,8 @@
 #define ADVENTURER	(1<<9)
 #define COOK		(1<<10)
 #define GRABBER		(1<<11)
-#define WAVE_DRIFTER (1<<16)
+#define MIGRANT		(1<<16)
+#define BANDIT		(1<<17)
 
 #define APPRENTICES		(1<<5)
 
@@ -222,7 +223,8 @@
 
 #define JDO_ADVENTURER 32.1
 #define JDO_PILGRIM 32.2
-#define JDO_DRIFTER 32.3
+#define JDO_MIGRANT  32.3
+#define JDO_BANDIT 31.3
 
 #define JDO_MERCENARY 33
 

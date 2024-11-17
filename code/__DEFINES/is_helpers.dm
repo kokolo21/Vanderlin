@@ -14,8 +14,6 @@
 //#define isturf(A) (istype(A, /turf)) This is actually a byond built-in. Added here for completeness sake.
 
 GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
-	/turf/open/space,
-	/turf/open/chasm,
 	/turf/open/lava,
 	/turf/open/water,
 	/turf/open/transparent/openspace
@@ -38,8 +36,6 @@ GLOBAL_LIST_INIT(our_forest_sex, typecacheof(list(
 #define isopenturf(A) (istype(A, /turf/open))
 
 #define isindestructiblefloor(A) (istype(A, /turf/open/indestructible))
-
-#define isspaceturf(A) (istype(A, /turf/open/space))
 
 #define isfloorturf(A) (istype(A, /turf/open/floor))
 
@@ -100,49 +96,16 @@ GLOBAL_LIST_INIT(our_forest_sex, typecacheof(list(
 //more carbon mobs
 #define ismonkey(A) (istype(A, /mob/living/carbon/monkey))
 
-#define isalien(A) (istype(A, /mob/living/carbon/alien))
-
-#define islarva(A) (istype(A, /mob/living/carbon/alien/larva))
-
-#define isalienadult(A) (istype(A, /mob/living/carbon/alien/humanoid) || istype(A, /mob/living/simple_animal/hostile/alien))
-
-#define isalienhunter(A) (istype(A, /mob/living/carbon/alien/humanoid/hunter))
-
-#define isaliensentinel(A) (istype(A, /mob/living/carbon/alien/humanoid/sentinel))
-
-#define isalienroyal(A) (istype(A, /mob/living/carbon/alien/humanoid/royal))
-
-#define isalienqueen(A) (istype(A, /mob/living/carbon/alien/humanoid/royal/queen))
-
 #define istruedevil(A) (istype(A, /mob/living/carbon/true_devil))
-
-//Silicon mobs
-#define issilicon(A) (istype(A, /mob/living/silicon))
-
-#define issiliconoradminghost(A) (istype(A, /mob/living/silicon) || IsAdminGhost(A))
-
-#define iscyborg(A) (istype(A, /mob/living/silicon/robot))
-
-#define isAI(A) (istype(A, /mob/living/silicon/ai))
-
-#define ispAI(A) (istype(A, /mob/living/silicon/pai))
 
 //Simple animals
 #define isanimal(A) (istype(A, /mob/living/simple_animal))
-
-#define isrevenant(A) (istype(A, /mob/living/simple_animal/revenant))
-
-#define isbot(A) (istype(A, /mob/living/simple_animal/bot))
 
 #define isshade(A) (istype(A, /mob/living/simple_animal/shade))
 
 #define ismouse(A) (istype(A, /mob/living/simple_animal/mouse))
 
 #define iscow(A) (istype(A, /mob/living/simple_animal/cow))
-
-#define isslime(A) (istype(A, /mob/living/simple_animal/slime))
-
-#define isdrone(A) (istype(A, /mob/living/simple_animal/drone))
 
 #define iscat(A) (istype(A, /mob/living/simple_animal/pet/cat))
 
@@ -151,14 +114,6 @@ GLOBAL_LIST_INIT(our_forest_sex, typecacheof(list(
 #define iscorgi(A) (istype(A, /mob/living/simple_animal/pet/dog/corgi))
 
 #define ishostile(A) (istype(A, /mob/living/simple_animal/hostile))
-
-#define isswarmer(A) (istype(A, /mob/living/simple_animal/hostile/swarmer))
-
-#define isguardian(A) (istype(A, /mob/living/simple_animal/hostile/guardian))
-
-#define isconstruct(A) (istype(A, /mob/living/simple_animal/hostile/construct))
-
-#define ismegafauna(A) (istype(A, /mob/living/simple_animal/hostile/megafauna))
 
 #define isclown(A) (istype(A, /mob/living/simple_animal/hostile/retaliate/clown))
 
@@ -187,19 +142,15 @@ GLOBAL_LIST_INIT(our_forest_sex, typecacheof(list(
 
 #define ismachinery(A) (istype(A, /obj/machinery))
 
-#define ismecha(A) (istype(A, /obj/mecha))
-
-#define is_cleanable(A) (istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/rune)) //if something is cleanable
+#define is_cleanable(A) (istype(A, /obj/effect/decal/cleanable)) //if something is cleanable
 
 #define isorgan(A) (istype(A, /obj/item/organ))
 
 #define isclothing(A) (istype(A, /obj/item/clothing))
 
-#define iscash(A) (istype(A, /obj/item/coin) || istype(A, /obj/item/stack/spacecash) || istype(A, /obj/item/holochip))
+#define iscash(A) (istype(A, /obj/item/stack/spacecash) || istype(A, /obj/item/holochip))
 
 GLOBAL_LIST_INIT(pointed_types, typecacheof(list(
-	/obj/item/pen,
-	/obj/item/screwdriver,
 	/obj/item/reagent_containers/syringe,
 	/obj/item/kitchen/fork)))
 
@@ -211,24 +162,6 @@ GLOBAL_LIST_INIT(pointed_types, typecacheof(list(
 
 #define isgun(A) (istype(A, /obj/item/gun))
 
-//Assemblies
-#define isassembly(O) (istype(O, /obj/item/assembly))
-
-#define isigniter(O) (istype(O, /obj/item/assembly/igniter))
-
-#define isprox(O) (istype(O, /obj/item/assembly/prox_sensor))
-
-#define issignaler(O) (istype(O, /obj/item/assembly/signaler))
-
-GLOBAL_LIST_INIT(glass_sheet_types, typecacheof(list(
-	/obj/item/stack/sheet/glass,
-	/obj/item/stack/sheet/rglass,
-	/obj/item/stack/sheet/plasmaglass,
-	/obj/item/stack/sheet/plasmarglass,
-	/obj/item/stack/sheet/titaniumglass,
-	/obj/item/stack/sheet/plastitaniumglass)))
-
-#define is_glass_sheet(O) (is_type_in_typecache(O, GLOB.glass_sheet_types))
 
 #define iseffect(O) (istype(O, /obj/effect))
 

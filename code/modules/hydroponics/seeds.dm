@@ -173,62 +173,13 @@
 		add_random_traits(1, 1)
 
 
-
-/obj/item/seeds/bullet_act(obj/projectile/Proj) //Works with the Somatoray to modify plant variables.
-	if(istype(Proj, /obj/projectile/energy/florayield))
-		var/rating = 1
-		if(istype(loc, /obj/machinery/hydroponics))
-			var/obj/machinery/hydroponics/H = loc
-			rating = H.rating
-
-		if(yield == 0)//Oh god don't divide by zero you'll doom us all.
-			adjust_yield(1 * rating)
-		else if(prob(1/(yield * yield) * 100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
-			adjust_yield(1 * rating)
-	else
-		return ..()
-
-
 // Harvest procs
 /obj/item/seeds/proc/getYield()
-	var/return_yield = yield
-
-	var/obj/machinery/hydroponics/parent = loc
-	if(istype(loc, /obj/machinery/hydroponics))
-		if(parent.yieldmod == 0)
-			return_yield = min(return_yield, 1)//1 if above zero, 0 otherwise
-		else
-			return_yield *= (parent.yieldmod)
-
-	return return_yield
+	return yield
 
 
 /obj/item/seeds/proc/harvest(mob/user)
-	var/obj/machinery/hydroponics/parent = loc //for ease of access
-	var/t_amount = 0
-	var/list/result = list()
-	var/output_loc = parent.Adjacent(user) ? user.loc : parent.loc //needed for TK
-	var/product_name
-	while(t_amount < getYield())
-		var/obj/item/reagent_containers/food/snacks/grown/t_prod = new product(output_loc, src)
-		if(parent.myseed.plantname != initial(parent.myseed.plantname))
-			t_prod.name = lowertext(parent.myseed.plantname)
-		if(productdesc)
-			t_prod.desc = productdesc
-		t_prod.seed.name = parent.myseed.name
-		t_prod.seed.desc = parent.myseed.desc
-		t_prod.seed.plantname = parent.myseed.plantname
-		result.Add(t_prod) // User gets a consumable
-		if(!t_prod)
-			return
-		t_amount++
-		product_name = parent.myseed.plantname
-	if(getYield() >= 1)
-		SSblackbox.record_feedback("tally", "food_harvested", getYield(), product_name)
-	parent.update_tray(user)
-
-	return result
-
+	return
 
 /obj/item/seeds/proc/prepare_result(obj/item/T)
 	if(!T.reagents)
@@ -385,64 +336,6 @@
 
 /obj/item/seeds/proc/on_chem_reaction(datum/reagents/S)  //in case seeds have some special interaction with special chems
 	return
-
-/obj/item/seeds/attackby(obj/item/O, mob/user, params)
-	if (istype(O, /obj/item/plant_analyzer))
-		to_chat(user, "<span class='info'>*---------*\n This is \a <span class='name'>[src]</span>.</span>")
-		var/text = get_analyzer_text()
-		if(text)
-			to_chat(user, "<span class='notice'>[text]</span>")
-
-		return
-
-/*	if(istype(O, /obj/item/pen))
-		var/choice = input("What would you like to change?") in list("Plant Name", "Seed Description", "Product Description", "Cancel")
-		if(!user.canUseTopic(src, BE_CLOSE))
-			return
-		switch(choice)
-			if("Plant Name")
-				var/newplantname = reject_bad_text(stripped_input(user, "Write a new plant name:", name, plantname))
-				if(!user.canUseTopic(src, BE_CLOSE))
-					return
-				if (length(newplantname) > 20)
-					to_chat(user, "<span class='warning'>That name is too long!</span>")
-					return
-				if(!newplantname)
-					to_chat(user, "<span class='warning'>That name is invalid.</span>")
-					return
-				else
-					name = "[lowertext(newplantname)]"
-					plantname = newplantname
-			if("Seed Description")
-				var/newdesc = stripped_input(user, "Write a new description:", name, desc)
-				if(!user.canUseTopic(src, BE_CLOSE))
-					return
-				if (length(newdesc) > 180)
-					to_chat(user, "<span class='warning'>That description is too long!</span>")
-					return
-				if(!newdesc)
-					to_chat(user, "<span class='warning'>That description is invalid.</span>")
-					return
-				else
-					desc = newdesc
-			if("Product Description")
-				if(product && !productdesc)
-					productdesc = initial(product.desc)
-				var/newproductdesc = stripped_input(user, "Write a new description:", name, productdesc)
-				if(!user.canUseTopic(src, BE_CLOSE))
-					return
-				if (length(newproductdesc) > 180)
-					to_chat(user, "<span class='warning'>That description is too long!</span>")
-					return
-				if(!newproductdesc)
-					to_chat(user, "<span class='warning'>That description is invalid.</span>")
-					return
-				else
-					productdesc = newproductdesc
-			else
-				return
-*/
-	..() // Fallthrough to item/attackby() so that bags can pick seeds up
 
 // Checks plants for broken tray icons. Use Advanced Proc Call to activate.
 // Maybe some day it would be used as unit test.

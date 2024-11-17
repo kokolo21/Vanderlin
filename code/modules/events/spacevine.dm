@@ -81,7 +81,7 @@
 
 /datum/spacevine_mutation/light/on_grow(obj/structure/spacevine/holder)
 	if(holder.energy)
-		holder.set_light(severity, 0.3)
+		holder.set_light(severity, severity, 0.3)
 
 /datum/spacevine_mutation/toxicity
 	name = "toxic"
@@ -90,8 +90,6 @@
 	quality = NEGATIVE
 
 /datum/spacevine_mutation/toxicity/on_cross(obj/structure/spacevine/holder, mob/living/crosser)
-	if(issilicon(crosser))
-		return
 	if(prob(severity) && istype(crosser) && !isvineimmune(crosser))
 		to_chat(crosser, "<span class='alert'>I accidentally touch the vine and feel a strange sensation.</span>")
 		crosser.adjustToxLoss(5)
@@ -257,21 +255,6 @@
 	else
 		. = expected_damage
 
-/datum/spacevine_mutation/flowering
-	name = "flowering"
-	hue = "#0A480D"
-	quality = NEGATIVE
-	severity = 10
-
-/datum/spacevine_mutation/flowering/on_grow(obj/structure/spacevine/holder)
-	if(holder.energy == 2 && prob(severity) && !locate(/obj/structure/alien/resin/flower_bud_enemy) in range(5,holder))
-		new/obj/structure/alien/resin/flower_bud_enemy(get_turf(holder))
-
-/datum/spacevine_mutation/flowering/on_cross(obj/structure/spacevine/holder, mob/living/crosser)
-	if(prob(25))
-		holder.entangle(crosser)
-
-
 // SPACE VINES (Note that this code is very similar to Biomass code)
 /obj/structure/spacevine
 	name = "weepvine"
@@ -379,9 +362,6 @@
 	for(var/datum/spacevine_mutation/SM in mutations)
 		SM.on_hit(src, user)
 	user_unbuckle_mob(user,user)
-
-/obj/structure/spacevine/attack_alien(mob/living/user)
-	eat(user)
 
 /datum/spacevine_controller
 	var/list/obj/structure/spacevine/vines
@@ -543,7 +523,7 @@
 /obj/structure/spacevine/proc/spread()
 	var/direction = pick(GLOB.cardinals)
 	var/turf/stepturf = get_step(src,direction)
-	if (!isspaceturf(stepturf) && stepturf.Enter(src))
+	if (stepturf.Enter(src))
 		for(var/datum/spacevine_mutation/SM in mutations)
 			SM.on_spread(src, stepturf)
 			stepturf = get_step(src,direction) //in case turf changes, to make sure no runtimes happen

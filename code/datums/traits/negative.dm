@@ -84,127 +84,6 @@
 	if(prob(0.05))
 		SEND_SIGNAL(quirk_holder, COMSIG_ADD_MOOD_EVENT, "depression", /datum/mood_event/depression)
 
-/datum/quirk/family_heirloom
-	name = "Family Heirloom"
-	desc = ""
-	value = -1
-	mood_quirk = TRUE
-	var/obj/item/heirloom
-	var/where
-	medical_record_text = "Patient demonstrates an unnatural attachment to a family heirloom."
-
-/datum/quirk/family_heirloom/on_spawn()
-	var/mob/living/carbon/human/H = quirk_holder
-	var/obj/item/heirloom_type
-
-	if(is_species(H, /datum/species/moth) && prob(50))
-		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
-	else
-		switch(quirk_holder.mind.assigned_role)
-			//Service jobs
-			if("Clown")
-				heirloom_type = /obj/item/bikehorn/golden
-			if("Mime")
-				heirloom_type = /obj/item/reagent_containers/food/snacks/baguette
-			if("Janitor")
-				heirloom_type = pick(/obj/item/mop, /obj/item/clothing/suit/caution, /obj/item/reagent_containers/glass/bucket)
-			if("Cook")
-				heirloom_type = pick(/obj/item/reagent_containers/food/condiment/saltshaker, /obj/item/rogueweapon/mace/woodclub/rollingpin, /obj/item/clothing/head/chefhat)
-			if("Botanist")
-				heirloom_type = pick(/obj/item/cultivator, /obj/item/reagent_containers/glass/bucket, /obj/item/storage/bag/plants, /obj/item/toy/plush/beeplushie)
-			if("Bartender")
-				heirloom_type = pick(/obj/item/reagent_containers/glass/rag, /obj/item/clothing/head/that, /obj/item/reagent_containers/food/drinks/shaker)
-			if("Curator")
-				heirloom_type = pick(/obj/item/pen/fountain, /obj/item/storage/pill_bottle/dice)
-			if("Chaplain")
-				heirloom_type = pick(/obj/item/toy/windupToolbox, /obj/item/reagent_containers/food/drinks/bottle/holywater)
-			if("Assistant")
-				heirloom_type = /obj/item/storage/toolbox/mechanical/old/heirloom
-			//Security/Command
-			if("Captain")
-				heirloom_type = /obj/item/reagent_containers/food/drinks/flask/gold
-			if("Head of Security")
-				heirloom_type = /obj/item/book/manual/wiki/security_space_law
-			if("Warden")
-				heirloom_type = /obj/item/book/manual/wiki/security_space_law
-			if("Security Officer")
-				heirloom_type = pick(/obj/item/book/manual/wiki/security_space_law, /obj/item/clothing/head/beret/sec)
-			if("Detective")
-				heirloom_type = /obj/item/reagent_containers/food/drinks/bottle/whiskey
-			if("Lawyer")
-				heirloom_type = pick(/obj/item/gavelhammer, /obj/item/book/manual/wiki/security_space_law)
-			//RnD
-			if("Research Director")
-				heirloom_type = /obj/item/toy/plush/slimeplushie
-			if("Scientist")
-				heirloom_type = /obj/item/toy/plush/slimeplushie
-			if("Roboticist")
-				heirloom_type = pick(subtypesof(/obj/item/toy/prize)) //look at this nerd
-			//Medical
-			if("Chief Medical Officer")
-				heirloom_type = pick(/obj/item/clothing/neck/stethoscope, /obj/item/bodybag)
-			if("Medical Doctor")
-				heirloom_type = pick(/obj/item/clothing/neck/stethoscope, /obj/item/bodybag)
-			if("Chemist")
-				heirloom_type = /obj/item/book/manual/wiki/chemistry
-			if("Virologist")
-				heirloom_type = /obj/item/reagent_containers/syringe
-			if("Geneticist")
-				heirloom_type = /obj/item/clothing/under/shorts/purple
-			//Engineering
-			if("Chief Engineer")
-				heirloom_type = pick(/obj/item/clothing/head/hardhat/white, /obj/item/screwdriver, /obj/item/wrench, /obj/item/weldingtool, /obj/item/crowbar, /obj/item/wirecutters)
-			if("Station Engineer")
-				heirloom_type = pick(/obj/item/clothing/head/hardhat, /obj/item/screwdriver, /obj/item/wrench, /obj/item/weldingtool, /obj/item/crowbar, /obj/item/wirecutters)
-			if("Atmospheric Technician")
-				heirloom_type = pick(/obj/item/lighter, /obj/item/lighter/greyscale, /obj/item/storage/box/matches)
-			//Supply
-			if("Quartermaster")
-				heirloom_type = pick(/obj/item/stamp, /obj/item/stamp/denied)
-			if("Cargo Technician")
-				heirloom_type = /obj/item/clipboard
-			if("Shaft Miner")
-				heirloom_type = pick(/obj/item/pickaxe/mini, /obj/item/shovel)
-
-	if(!heirloom_type)
-		heirloom_type = pick(
-		/obj/item/toy/cards/deck,
-		/obj/item/lighter,
-		/obj/item/dice/d20)
-	heirloom = new heirloom_type(get_turf(quirk_holder))
-	var/list/slots = list(
-		"in my left pocket" = SLOT_L_STORE,
-		"in my right pocket" = SLOT_R_STORE,
-		"in my backpack" = SLOT_IN_BACKPACK
-	)
-	where = H.equip_in_one_of_slots(heirloom, slots, FALSE) || "at my feet"
-
-/datum/quirk/family_heirloom/post_add()
-	if(where == "in my backpack")
-		var/mob/living/carbon/human/H = quirk_holder
-		SEND_SIGNAL(H.back, COMSIG_TRY_STORAGE_SHOW, H)
-
-	to_chat(quirk_holder, "<span class='boldnotice'>There is a precious family [heirloom.name] [where], passed down from generation to generation. Keep it safe!</span>")
-
-	var/list/names = splittext(quirk_holder.real_name, " ")
-	var/family_name = names[names.len]
-
-	heirloom.AddComponent(/datum/component/heirloom, quirk_holder.mind, family_name)
-
-/datum/quirk/family_heirloom/on_process()
-	if(heirloom in quirk_holder.GetAllContents())
-		SEND_SIGNAL(quirk_holder, COMSIG_CLEAR_MOOD_EVENT, "family_heirloom_missing")
-		SEND_SIGNAL(quirk_holder, COMSIG_ADD_MOOD_EVENT, "family_heirloom", /datum/mood_event/family_heirloom)
-	else
-		SEND_SIGNAL(quirk_holder, COMSIG_CLEAR_MOOD_EVENT, "family_heirloom")
-		SEND_SIGNAL(quirk_holder, COMSIG_ADD_MOOD_EVENT, "family_heirloom_missing", /datum/mood_event/family_heirloom_missing)
-
-/datum/quirk/family_heirloom/clone_data()
-	return heirloom
-
-/datum/quirk/family_heirloom/on_clone(data)
-	heirloom = data
-
 /datum/quirk/frail
 	name = "Frail"
 	desc = ""
@@ -251,24 +130,6 @@
 	lose_text = "<span class='danger'>You're no longer severely affected by alcohol.</span>"
 	medical_record_text = "Patient demonstrates a low tolerance for alcohol. (Wimp)"
 
-/datum/quirk/nearsighted //t. errorage
-	name = "Nearsighted"
-	desc = ""
-	value = -1
-	gain_text = "<span class='danger'>Things far away from you start looking blurry.</span>"
-	lose_text = "<span class='notice'>I start seeing faraway things normally again.</span>"
-	medical_record_text = "Patient requires prescription glasses in order to counteract nearsightedness."
-
-/datum/quirk/nearsighted/add()
-	quirk_holder.become_nearsighted(ROUNDSTART_TRAIT)
-
-/datum/quirk/nearsighted/on_spawn()
-	var/mob/living/carbon/human/H = quirk_holder
-	var/obj/item/clothing/glasses/regular/glasses = new(get_turf(H))
-	H.put_in_hands(glasses)
-	H.equip_to_slot(glasses, SLOT_GLASSES)
-	H.regenerate_icons() //this is to remove the inhand icon, which persists even if it's not in their hands
-
 /datum/quirk/nyctophobia
 	name = "Nyctophobia"
 	desc = ""
@@ -298,40 +159,6 @@
 	lose_text = "<span class='notice'>I think you can defend myself again.</span>"
 	medical_record_text = "Patient is unusually pacifistic and cannot bring themselves to cause physical harm."
 
-/datum/quirk/paraplegic
-	name = "Paraplegic"
-	desc = ""
-	value = -3
-	human_only = TRUE
-	gain_text = null // Handled by trauma.
-	lose_text = null
-	medical_record_text = "Patient has an untreatable impairment in motor function in the lower extremities."
-
-/datum/quirk/paraplegic/add()
-	var/datum/brain_trauma/severe/paralysis/paraplegic/T = new()
-	var/mob/living/carbon/human/H = quirk_holder
-	H.gain_trauma(T, TRAUMA_RESILIENCE_ABSOLUTE)
-
-/datum/quirk/paraplegic/on_spawn()
-	if(quirk_holder.buckled) // Handle late joins being buckled to arrival shuttle chairs.
-		quirk_holder.buckled.unbuckle_mob(quirk_holder)
-
-	var/turf/T = get_turf(quirk_holder)
-	var/obj/structure/chair/spawn_chair = locate() in T
-
-	var/obj/vehicle/ridden/wheelchair/wheels = new(T)
-	if(spawn_chair) // Makes spawning on the arrivals shuttle more consistent looking
-		wheels.setDir(spawn_chair.dir)
-
-	wheels.buckle_mob(quirk_holder)
-
-	// During the spawning process, they may have dropped what they were holding, due to the paralysis
-	// So put the things back in their hands.
-
-	for(var/obj/item/I in T)
-		if(I.fingerprintslast == quirk_holder.ckey)
-			quirk_holder.put_in_hands(I)
-
 /datum/quirk/poor_aim
 	name = "Poor Aim"
 	desc = ""
@@ -345,39 +172,6 @@
 	value = -1
 	mob_trait = TRAIT_PROSOPAGNOSIA
 	medical_record_text = "Patient suffers from prosopagnosia and cannot recognize faces."
-
-/datum/quirk/prosthetic_limb
-	name = "Prosthetic Limb"
-	desc = ""
-	value = -1
-	var/slot_string = "limb"
-	medical_record_text = "During physical examination, patient was found to have a prosthetic limb."
-
-/datum/quirk/prosthetic_limb/on_spawn()
-	var/limb_slot = pick(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG)
-	var/mob/living/carbon/human/H = quirk_holder
-	var/obj/item/bodypart/old_part = H.get_bodypart(limb_slot)
-	var/obj/item/bodypart/prosthetic
-	switch(limb_slot)
-		if(BODY_ZONE_L_ARM)
-			prosthetic = new/obj/item/bodypart/l_arm/robot/surplus(quirk_holder)
-			slot_string = "left arm"
-		if(BODY_ZONE_R_ARM)
-			prosthetic = new/obj/item/bodypart/r_arm/robot/surplus(quirk_holder)
-			slot_string = "right arm"
-		if(BODY_ZONE_L_LEG)
-			prosthetic = new/obj/item/bodypart/l_leg/robot/surplus(quirk_holder)
-			slot_string = "left leg"
-		if(BODY_ZONE_R_LEG)
-			prosthetic = new/obj/item/bodypart/r_leg/robot/surplus(quirk_holder)
-			slot_string = "right leg"
-	prosthetic.replace_limb(H)
-	qdel(old_part)
-	H.regenerate_icons()
-
-/datum/quirk/prosthetic_limb/post_add()
-	to_chat(quirk_holder, "<span class='boldannounce'>My [slot_string] has been replaced with a surplus prosthetic. It is fragile and will easily come apart under duress. Additionally, \
-	you need to use a welding tool and cables to repair it, instead of bruise packs and ointment.</span>")
 
 /datum/quirk/pushover
 	name = "Pushover"

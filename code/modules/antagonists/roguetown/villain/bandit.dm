@@ -18,7 +18,6 @@
 	owner.special_role = "Bandit"
 	forge_objectives()
 	. = ..()
-	move_to_spawnpoint()
 	finalize_bandit()
 	equip_bandit()
 
@@ -64,19 +63,9 @@
 		owner.i_know_person(MF)
 		owner.person_knows_me(MF)
 
-	var/mob/living/carbon/human/H = owner.current
-	if(H.mobid in GLOB.character_list)
-		GLOB.character_list[H.mobid] = null
-	GLOB.chosen_names -= H.real_name
-	H.cmode_music = list('sound/music/combat_bandit.ogg', 'sound/music/combat_bandit2.ogg', 'sound/music/combat_bandit3.ogg')
-
-	addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, choose_name_popup), "BANDIT"), 5 SECONDS)
-//	H.job = "Bandit"
-//	H.advjob = pick("Cheesemaker", "Mercenary", "Barbarian", "Ranger", "Rogue")
-	H.equipOutfit(/datum/outfit/job/roguetown/bandit)
-
 	return TRUE
 
+/*
 /datum/outfit/job/roguetown/bandit/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.become_blind("TRAIT_GENERIC")
@@ -88,14 +77,13 @@
 		if("Deserter") //well armored, polearm skill, shield skill. The heavy melee class.
 			H.set_blindness(0)
 			to_chat(H, span_warning("You were once a soldier employed under a lord, and left illegally. You're capable with armor, shields, and polearms."))
-			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/axesmaces, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+			H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 1, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 			H.change_stat("strength", 2)
 			H.change_stat("endurance", 1)
 			H.change_stat("constitution", 1)
@@ -105,7 +93,7 @@
 			beltl = /obj/item/rogueweapon/knife/hunting
 
 			if(H.age == AGE_OLD) //old deserters are experts with polearms
-				H.mind.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
+				H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
 
 			var/helmet2choose = pickweight(list("Volfhelm" = 5, "Skullcap" = 2, "Barbute" = 1))
 			switch(helmet2choose)
@@ -142,15 +130,15 @@
 		if("Poacher") //good perception, speed, bow skill, and knife skill. Also some cooking and skincrafting since they are poachers. The speedy ranged class.
 			H.set_blindness(0)
 			to_chat(H, span_warning("You illegally hunt within the lands of others, and are quite good at it."))
-			H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/axesmaces, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/tanning, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/traps, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 1, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/craft/tanning, 2, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/craft/traps, 2, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 			ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 			H.change_stat("strength", 1)
 			H.change_stat("endurance", 1)
@@ -175,9 +163,9 @@
 					head = /obj/item/clothing/head/roguetown/helmet/leather/volfhelm
 
 			if(H.age == AGE_OLD) //old poachers are better at their jobs
-				H.mind.adjust_skillrank(/datum/skill/craft/tanning, 1, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
-				H.mind.adjust_skillrank(/datum/skill/labor/butchering, 1, TRUE)
+				H.mind?.adjust_skillrank(/datum/skill/craft/tanning, 1, TRUE)
+				H.mind?.adjust_skillrank(/datum/skill/misc/sneaking, 1, TRUE)
+				H.mind?.adjust_skillrank(/datum/skill/labor/butchering, 1, TRUE)
 
 			switch(pick(1,2,3))
 				if (1)
@@ -190,14 +178,14 @@
 		if("Brigand") //good sword skill, shield skill, flail skill, mace skill, slightly speedy. Kind of an all rounder.
 			H.set_blindness(0)
 			to_chat(H, span_warning("You are experienced with using swords and clubs to threaten and rob others."))
-			H.mind.adjust_skillrank(/datum/skill/combat/axesmaces, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+			H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
 			H.change_stat("strength", 2)
 			H.change_stat("endurance", 2)
 			H.change_stat("constitution", 1)
@@ -241,16 +229,16 @@
 	H.cure_blind("TRAIT_GENERIC")
 
 	// The commmon skills shared between all bandits
-	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
 
-	H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/craft/crafting, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/craft/crafting, 2, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 
 	H.mind.teach_crafting_recipe(/datum/crafting_recipe/bandit_volfhelm)
 	H.mind.teach_crafting_recipe(/datum/crafting_recipe/cult_hood)
@@ -275,6 +263,7 @@
 		B.sellprice = rand(44, 88)
 
 	H.ambushable = FALSE
+*/
 
 /datum/antagonist/bandit/roundend_report()
 	if(owner?.current)

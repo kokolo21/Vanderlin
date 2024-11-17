@@ -12,7 +12,7 @@
 	coldmod = 1.5
 	heatmod = 0.67
 	default_features = list("mcolor" = "0F0", "tail_lizard" = "Smooth", "snout" = "Round", "horns" = "None", "frills" = "None", "spines" = "None", "body_markings" = "None", "legs" = "Normal Legs")
-	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | ERT_SPAWN | SLIME_EXTRACT
+	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | SLIME_EXTRACT
 	attack_verb = "slash"
 	attack_sound = 'sound/blank.ogg'
 	miss_sound = 'sound/blank.ogg'
@@ -70,13 +70,3 @@
 		mutant_bodyparts |= "tail_lizard"
 		mutant_bodyparts |= "spines"
 	H.update_body()
-
-/*
-Lizard subspecies: ASHWALKERS
-*/
-/datum/species/lizard/ashwalker
-	name = "Ash Walker"
-	id = "ashlizard"
-	limbs_id = "lizard"
-	species_traits = list(MUTCOLORS,EYECOLOR,LIPS,DIGITIGRADE)
-	inherent_traits = list(TRAIT_CHUNKYFINGERS,TRAIT_NOBREATH)

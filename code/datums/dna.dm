@@ -586,28 +586,18 @@
 	dna.remove_all_mutations()
 	dna.stability = 100
 	if(prob(max(70-instability,0)))
-		switch(rand(0,10)) //not complete and utter death
+		switch(rand(0,8)) //not complete and utter death
 			if(0)
 				monkeyize()
-			if(1)
-				gain_trauma(/datum/brain_trauma/severe/paralysis/paraplegic)
-				new/obj/vehicle/ridden/wheelchair(get_turf(src)) //don't buckle, because I can't imagine to plethora of things to go through that could otherwise break
-				to_chat(src, span_warning("My flesh turned into a wheelchair and I can't feel my legs."))
-			if(2)
+			if(1 to 2)
 				corgize()
 			if(3)
 				to_chat(src, span_notice("Oh, I actually feel quite alright!"))
-			if(4)
+			if(4 to 5)
 				to_chat(src, span_notice("Oh, I actually feel quite alright!")) //you thought
 				physiology.damage_resistance = -20000
-			if(5)
-				to_chat(src, span_notice("Oh, I actually feel quite alright!"))
-				reagents.add_reagent(/datum/reagent/aslimetoxin, 10)
-			if(6)
+			if(6 to 7)
 				apply_status_effect(STATUS_EFFECT_GO_AWAY)
-			if(7)
-				to_chat(src, span_notice("Oh, I actually feel quite alright!"))
-				ForceContractDisease(new/datum/disease/decloning()) //slow acting, non-viral clone damage based GBS
 			if(8)
 				var/list/elligible_organs = list()
 				for(var/obj/item/organ/O in internal_organs) //make sure we dont get an implant or cavity item
@@ -618,11 +608,6 @@
 					O.Remove(src)
 					visible_message(span_danger("[src] vomits up their [O.name]!"), "<span class='danger'>I vomit up my [O.name]") //no "vomit up my the heart"
 					O.forceMove(drop_location())
-					if(prob(20))
-						O.animate_atom_living()
-			if(9 to 10)
-				ForceContractDisease(new/datum/disease/gastrolosis())
-				to_chat(src, span_notice("Oh, I actually feel quite alright!"))
 	else
 		switch(rand(0,5))
 			if(0)

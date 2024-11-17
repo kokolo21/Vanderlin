@@ -208,7 +208,7 @@ GLOBAL_LIST_EMPTY(ritualslist)
 	if(iszizocultist(user) || iszizolackey(user))
 		to_chat(user, "It is of the [sigil_type] circle.")
 
-/obj/effect/decal/cleanable/sigil/Initialize(mapload, list/datum/disease/diseases)
+/obj/effect/decal/cleanable/sigil/Initialize(mapload)
 	. = ..()
 	if(!LAZYLEN(GLOB.ritualslist))
 		testing("initializing ritualslist")
@@ -721,6 +721,12 @@ GLOBAL_LIST_EMPTY(ritualslist)
 	center_requirement = /obj/item/natural/cloth
 
 	function = /proc/criminalstool
+
+/obj/item/soap/cult
+	name = "accursed soap"
+	desc = "It is pulsating."
+	uses = 9
+	cleanspeed = 1
 
 /proc/criminalstool(mob/user, turf/C)
 	new /obj/item/soap/cult(C)

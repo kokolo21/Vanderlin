@@ -37,8 +37,7 @@
 	if(user == src)
 		if(get_num_arms(FALSE) < 1)
 			return
-		if(!can_do_sex())
-			return
+		/* // No undies removing
 		if(user.zone_selected == BODY_ZONE_PRECISE_GROIN)
 			if(get_location_accessible(src, BODY_ZONE_PRECISE_GROIN, skipundies = TRUE))
 				if(underwear == "Nude")
@@ -54,6 +53,7 @@
 						U = new/obj/item/undies/f(get_turf(src))
 					U.color = underwear_color
 					user.put_in_hands(U)
+		*/
 #endif
 
 /mob/living/carbon/human/Initialize()
@@ -132,7 +132,6 @@
 		AddComponent(/datum/component/mood)
 
 /mob/living/carbon/human/Destroy()
-	QDEL_NULL(sexcon)
 	STOP_PROCESSING(SShumannpc, src)
 	QDEL_NULL(physiology)
 	GLOB.human_list -= src
@@ -142,10 +141,6 @@
 /mob/living/carbon/human/prepare_data_huds()
 	//Update med hud images...
 	..()
-	//...sec hud images...
-	sec_hud_set_ID()
-	sec_hud_set_implants()
-	sec_hud_set_security_status()
 	//...and display them.
 	add_to_all_human_data_huds()
 
@@ -338,12 +333,6 @@
 
 	dat += "<tr><td><hr></td></tr>"
 
-#ifdef MATURESERVER
-	if(get_location_accessible(src, BODY_ZONE_PRECISE_GROIN, skipundies = TRUE))
-		if(can_do_sex())
-			dat += "<tr><td><BR><B>Underwear:</B> <A href='?src=[REF(src)];undiesthing=1'>[underwear == "Nude" ? "Nothing" : "Remove"]</A></td></tr>"
-#endif
-
 	dat += {"</table>"}
 
 	var/datum/browser/popup = new(user, "mob[REF(src)]", "[src]", 220, 690)
@@ -353,10 +342,6 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(atom/movable/AM)
-	var/mob/living/simple_animal/bot/mulebot/MB = AM
-	if(istype(MB))
-		MB.RunOver(src)
-
 	. = ..()
 	spreadFire(AM)
 
@@ -386,77 +371,6 @@
 		// Might need re-wording.
 		to_chat(user, "<span class='alert'>There is no exposed flesh or thin material [above_neck(target_zone) ? "on [p_their()] head" : "on [p_their()] body"].</span>")
 
-/mob/living/carbon/human/assess_threat(judgement_criteria, lasercolor = "", datum/callback/weaponcheck=null)
-	if(judgement_criteria & JUDGE_EMAGGED)
-		return 10 //Everyone is a criminal!
-
-	var/threatcount = 0
-
-	//Lasertag bullshit
-	if(lasercolor)
-		if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
-			if(istype(wear_armor, /obj/item/clothing/suit/redtag))
-				threatcount += 4
-			if(is_holding_item_of_type(/obj/item/gun/energy/laser/redtag))
-				threatcount += 4
-			if(istype(belt, /obj/item/gun/energy/laser/redtag))
-				threatcount += 2
-
-		if(lasercolor == "r")
-			if(istype(wear_armor, /obj/item/clothing/suit/bluetag))
-				threatcount += 4
-			if(is_holding_item_of_type(/obj/item/gun/energy/laser/bluetag))
-				threatcount += 4
-			if(istype(belt, /obj/item/gun/energy/laser/bluetag))
-				threatcount += 2
-
-		return threatcount
-
-	//Check for ID
-	var/obj/item/card/id/idcard = get_idcard(FALSE)
-	if( (judgement_criteria & JUDGE_IDCHECK) && !idcard && name=="Unknown")
-		threatcount += 4
-
-	//Check for weapons
-	if( (judgement_criteria & JUDGE_WEAPONCHECK) && weaponcheck)
-		if(!idcard || !(ACCESS_WEAPONS in idcard.access))
-			for(var/obj/item/I in held_items) //if they're holding a gun
-				if(weaponcheck.Invoke(I))
-					threatcount += 4
-			if(weaponcheck.Invoke(belt) || weaponcheck.Invoke(back)) //if a weapon is present in the belt or back slot
-				threatcount += 2 //not enough to trigger look_for_perp() on it's own unless they also have criminal status.
-
-	//Check for arrest warrant
-	if(judgement_criteria & JUDGE_RECORDCHECK)
-		var/perpname = get_face_name(get_id_name())
-		var/datum/data/record/R = find_record("name", perpname, GLOB.data_core.security)
-		if(R && R.fields["criminal"])
-			switch(R.fields["criminal"])
-				if("*Arrest*")
-					threatcount += 5
-				if("Incarcerated")
-					threatcount += 2
-				if("Paroled")
-					threatcount += 2
-
-	//Check for dresscode violations
-	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/hardsuit/wizard))
-		threatcount += 2
-
-	//Check for nonhuman scum
-	if(dna && dna.species.id && dna.species.id != "human")
-		threatcount += 1
-
-	//mindshield implants imply trustworthyness
-	if(HAS_TRAIT(src, TRAIT_MINDSHIELD))
-		threatcount -= 1
-
-	//Agent cards lower threatlevel.
-	if(istype(idcard, /obj/item/card/id/syndicate))
-		threatcount -= 5
-
-	return threatcount
-
 
 //Used for new human mobs created by cloning/goleming/podding
 /mob/living/carbon/human/proc/set_cloned_appearance()
@@ -468,15 +382,6 @@
 	underwear = "Nude"
 	update_body()
 	update_hair()
-
-/mob/living/carbon/human/singularity_pull(S, current_size)
-	..()
-	if(current_size >= STAGE_THREE)
-		for(var/obj/item/hand in held_items)
-			if(prob(current_size * 5) && hand.w_class >= ((11-current_size)/2)  && dropItemToGround(hand))
-				step_towards(hand, src)
-				to_chat(src, "<span class='warning'>\The [S] pulls \the [hand] from your grip!</span>")
-	rad_act(current_size * 3)
 
 /mob/living/carbon/human/proc/do_cpr(mob/living/carbon/C)
 	CHECK_DNA_AND_SPECIES(C)
@@ -776,7 +681,6 @@
 	VV_DROPDOWN_OPTION(VV_HK_MAKE_MONKEY, "Make Monkey")
 	VV_DROPDOWN_OPTION(VV_HK_MAKE_CYBORG, "Make Cyborg")
 	VV_DROPDOWN_OPTION(VV_HK_MAKE_SLIME, "Make Slime")
-	VV_DROPDOWN_OPTION(VV_HK_MAKE_ALIEN, "Make Alien")
 	VV_DROPDOWN_OPTION(VV_HK_SET_SPECIES, "Set Species")
 	VV_DROPDOWN_OPTION(VV_HK_PURRBATION, "Toggle Purrbation")
 
@@ -839,12 +743,6 @@
 		if(alert("Confirm mob type change?",,"Transform","Cancel") != "Transform")
 			return
 		usr.client.holder.Topic("vv_override", list("makerobot"=href_list[VV_HK_TARGET]))
-	if(href_list[VV_HK_MAKE_ALIEN])
-		if(!check_rights(R_SPAWN))
-			return
-		if(alert("Confirm mob type change?",,"Transform","Cancel") != "Transform")
-			return
-		usr.client.holder.Topic("vv_override", list("makealien"=href_list[VV_HK_TARGET]))
 	if(href_list[VV_HK_MAKE_SLIME])
 		if(!check_rights(R_SPAWN))
 			return
@@ -1047,125 +945,11 @@
 /mob/living/carbon/human/species/felinid
 	race = /datum/species/human/felinid
 
-/mob/living/carbon/human/species/fly
-	race = /datum/species/fly
-
-/mob/living/carbon/human/species/golem
-	race = /datum/species/golem
-
-/mob/living/carbon/human/species/golem/random
-	race = /datum/species/golem/random
-
-/mob/living/carbon/human/species/golem/adamantine
-	race = /datum/species/golem/adamantine
-
-/mob/living/carbon/human/species/golem/plasma
-	race = /datum/species/golem/plasma
-
-/mob/living/carbon/human/species/golem/diamond
-	race = /datum/species/golem/diamond
-
-/mob/living/carbon/human/species/golem/gold
-	race = /datum/species/golem/gold
-
-/mob/living/carbon/human/species/golem/silver
-	race = /datum/species/golem/silver
-
-/mob/living/carbon/human/species/golem/plasteel
-	race = /datum/species/golem/plasteel
-
-/mob/living/carbon/human/species/golem/titanium
-	race = /datum/species/golem/titanium
-
-/mob/living/carbon/human/species/golem/plastitanium
-	race = /datum/species/golem/plastitanium
-
-/mob/living/carbon/human/species/golem/alien_alloy
-	race = /datum/species/golem/alloy
-
-/mob/living/carbon/human/species/golem/wood
-	race = /datum/species/golem/wood
-
-/mob/living/carbon/human/species/golem/uranium
-	race = /datum/species/golem/uranium
-
-/mob/living/carbon/human/species/golem/sand
-	race = /datum/species/golem/sand
-
-/mob/living/carbon/human/species/golem/glass
-	race = /datum/species/golem/glass
-
-/mob/living/carbon/human/species/golem/bluespace
-	race = /datum/species/golem/bluespace
-
-/mob/living/carbon/human/species/golem/bananium
-	race = /datum/species/golem/bananium
-
-/mob/living/carbon/human/species/golem/blood_cult
-	race = /datum/species/golem/runic
-
-/mob/living/carbon/human/species/golem/cloth
-	race = /datum/species/golem/cloth
-
-/mob/living/carbon/human/species/golem/plastic
-	race = /datum/species/golem/plastic
-
-/mob/living/carbon/human/species/golem/bronze
-	race = /datum/species/golem/bronze
-
-/mob/living/carbon/human/species/golem/cardboard
-	race = /datum/species/golem/cardboard
-
-/mob/living/carbon/human/species/golem/leather
-	race = /datum/species/golem/leather
-
-/mob/living/carbon/human/species/golem/bone
-	race = /datum/species/golem/bone
-
-/mob/living/carbon/human/species/golem/durathread
-	race = /datum/species/golem/durathread
-
-/mob/living/carbon/human/species/golem/snow
-	race = /datum/species/golem/snow
-
-/mob/living/carbon/human/species/golem/capitalist
-	race = /datum/species/golem/capitalist
-
-/mob/living/carbon/human/species/golem/soviet
-	race = /datum/species/golem/soviet
-
-/mob/living/carbon/human/species/jelly
-	race = /datum/species/jelly
-
-/mob/living/carbon/human/species/jelly/slime
-	race = /datum/species/jelly/slime
-
-/mob/living/carbon/human/species/jelly/stargazer
-	race = /datum/species/jelly/stargazer
-
-/mob/living/carbon/human/species/jelly/luminescent
-	race = /datum/species/jelly/luminescent
-
 /mob/living/carbon/human/species/lizard
 	race = /datum/species/lizard
 
 /mob/living/carbon/human/species/ethereal
 	race = /datum/species/ethereal
-
-/mob/living/carbon/human/species/lizard/ashwalker
-	race = /datum/species/lizard/ashwalker
-
-/mob/living/carbon/human/species/moth
-	race = /datum/species/moth
-
-/mob/living/carbon/human/species/mush
-	race = /datum/species/mush
-
-/mob/living/carbon/human/species/plasma
-	race = /datum/species/plasmaman
-
-/mob/living/carbon/human/species/pod
-	race = /datum/species/pod
 
 /mob/living/carbon/human/species/shadow
 	race = /datum/species/shadow
@@ -1173,17 +957,8 @@
 /mob/living/carbon/human/species/shadow/nightmare
 	race = /datum/species/shadow/nightmare
 
-//mob/living/carbon/human/species/skeleton
-//	race = /datum/species/skeleton
-
 /mob/living/carbon/human/species/snail
 	race = /datum/species/snail
-
-/mob/living/carbon/human/species/synth
-	race = /datum/species/synth
-
-/mob/living/carbon/human/species/synth/military
-	race = /datum/species/synth/military
 
 /mob/living/carbon/human/species/vampire
 	race = /datum/species/vampire

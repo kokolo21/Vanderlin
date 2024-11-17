@@ -26,6 +26,7 @@
 #define TRAIT_RETARD_ANATOMY			"Inhumen Anatomy" //can't wear hats and shoes
 #define TRAIT_NASTY_EATER 				"Inhumen Digestion" //can eat rotten food, organs, poison berries, and drink murky water
 #define TRAIT_NOFALLDAMAGE1 		"Minor fall damage immunity"
+#define TRAIT_DEATHSIGHT "Veiled Whispers" // Is notified when a player character dies, but not told exactly where or how.
 #define TRAIT_ROT_EATER				"Blessing of Pestra" //can eat rotten food
 #define TRAIT_ORGAN_EATER				"Blessing of Graggar"
 #define TRAIT_SOUL_EXAMINE				"Blessing of Necra" //can check bodies to see if they have departed
@@ -58,6 +59,7 @@
 #define TRAIT_IWASREVIVED "iwasrevived" //prevents PQ gain from reviving the same person twice
 #define TRAIT_IWASUNZOMBIFIED "iwasunzombified" //prevents PQ gain from curing a zombie twice
 #define TRAIT_ZIZOID_HUNTED "zizoidhunted" // Used to signal character has been marked by death by the Zizoid cult
+#define TRAIT_CABAL "Of the Cabal" //Zizo cultists recognize each other too
 
 // JOB RELATED TRAITS
 
@@ -108,6 +110,8 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_SHOCKIMMUNE = "I am immune to electrical shocks.",
 	TRAIT_INTRAINING = "I'm going to be a knight someday! I can use training dummies more effectively than others.",
 	TRAIT_MALUMFIRE = "My hands are blessed by Malum to forge items of superb quality.",
+	TRAIT_DEATHSIGHT = span_info("I can feel when someone nearby draws the Undermaiden's attention."),
+	TRAIT_CABAL = span_info("In secret, I have studied the ways of Her ascension, and know of others of the Cabal."),
 	))
 
 // trait accessor defines
@@ -192,7 +196,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_IGNOREDAMAGESLOWDOWN "ignoredamageslowdown"
 #define TRAIT_DEATHCOMA			"deathcoma" //Causes death-like unconsciousness
 #define TRAIT_FAKEDEATH			"fakedeath" //Makes the owner appear as dead to most forms of medical examination
-#define TRAIT_XENO_HOST			"xeno_host"	//Tracks whether we're gonna be a baby alien's mummy.
 #define TRAIT_STUNIMMUNE		"stun_immunity"
 #define TRAIT_STUNRESISTANCE    "stun_resistance"
 #define TRAIT_SLEEPIMMUNE		"sleep_immunity"
@@ -353,7 +356,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define ABDUCTOR_ANTAGONIST "abductor-antagonist"
 #define NUKEOP_TRAIT "nuke-op"
 #define DEATHSQUAD_TRAIT "deathsquad"
-#define MEGAFAUNA_TRAIT "megafauna"
 #define CLOWN_NUKE_TRAIT "clown-nuke"
 #define STICKY_MOUSTACHE_TRAIT "sticky-moustache"
 #define CHAINSAW_FRENZY_TRAIT "chainsaw-frenzy"

@@ -207,9 +207,6 @@
 	. = ..()
 	var/mob/M = usr
 
-	if(ismecha(M.loc)) // stops inventory actions in a mech
-		return
-
 	if(!M.incapacitated() && loc == M && istype(over_object, /atom/movable/screen/inventory/hand))
 		var/atom/movable/screen/inventory/hand/H = over_object
 		if(M.putItemFromInventoryInHandIfPossible(src, H.held_index))
@@ -223,7 +220,7 @@
 	foodtype = CLOTH
 
 /obj/item/clothing/attack(mob/M, mob/user, def_zone)
-	if(user.used_intent.type != INTENT_HARM && ismoth(M))
+	if(user.used_intent.type != INTENT_HARM)
 		var/obj/item/reagent_containers/food/snacks/clothing/clothing_as_food = new
 		clothing_as_food.name = name
 		if(clothing_as_food.attack(M, user, def_zone))
