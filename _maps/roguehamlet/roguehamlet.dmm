@@ -4010,7 +4010,6 @@
 /obj/structure/rack/rogue{
 	pixel_y = 16
 	},
-/obj/item/keyring/guardcastle,
 /turf/open/floor/rogue/wood/nosmooth,
 /area/rogue/indoors/town/garrison)
 "erc" = (
@@ -8206,7 +8205,6 @@
 /area/rogue/indoors/town/shop)
 "iDr" = (
 /obj/structure/rack/rogue,
-/obj/item/keyring/guardcastle,
 /turf/open/floor/rogue/wood/nosmooth,
 /area/rogue/indoors/town/garrison)
 "iDN" = (
@@ -15087,7 +15085,6 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/town/basement)
 "pwX" = (
-/obj/structure/bookcase/random/reference,
 /obj/item/book/rogue/secret/xylix,
 /obj/item/book/rogue/law,
 /turf/open/floor/rogue/tile{
@@ -18483,10 +18480,6 @@
 /obj/structure/flora/roguetree,
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/bog)
-"sYX" = (
-/obj/structure/kneestingers,
-/turf/open/water/sewer,
-/area/rogue/outdoors/exposed/under/sewer)
 "sZD" = (
 /obj/structure/flora/roguegrass/bush/wall/tall,
 /turf/open/floor/rogue/grass,
@@ -22144,7 +22137,6 @@
 /obj/item/candle/yellow,
 /obj/item/candle/yellow,
 /obj/item/candle/yellow,
-/obj/item/keyring/servant,
 /obj/item/soap,
 /turf/open/floor/rogue/cobble,
 /area/rogue/outdoors/exposed/under/basement)
@@ -35629,7 +35621,7 @@ lvI
 gtw
 hsL
 psp
-sYX
+pzz
 ijK
 qLT
 wlB
@@ -37763,7 +37755,7 @@ ced
 ced
 psp
 psp
-sYX
+pzz
 ijK
 nmN
 wlB
@@ -66459,7 +66451,7 @@ xKg
 sVV
 sVV
 sVV
-bSm
+bXs
 lif
 lif
 qeY

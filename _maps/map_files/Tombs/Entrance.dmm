@@ -1,0 +1,1065 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"c" = (
+/turf/open/floor/rogue/dirt/road,
+/area/rogue)
+"e" = (
+/obj/machinery/light/rogue/campfire/longlived,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"g" = (
+/obj/structure/closet/dirthole/closed/loot,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"h" = (
+/obj/structure/roguewindow/openclose,
+/turf/closed/wall/mineral/rogue/wooddark/vertical,
+/area/rogue)
+"i" = (
+/turf/closed/wall/mineral/rogue/wooddark/horizontal,
+/area/rogue)
+"j" = (
+/turf/closed/wall/mineral/rogue/tent,
+/area/rogue)
+"l" = (
+/turf/closed/wall/mineral/rogue/stonebrick,
+/area/rogue)
+"m" = (
+/obj/structure/chair/bench/throne,
+/mob/living/carbon/human/species/orc/warlord/skilled,
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"n" = (
+/obj/structure/closet/dirthole/grave,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"p" = (
+/obj/structure/fluff/railing/fence,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"r" = (
+/obj/structure/table/wood/counter/end{
+	dir = 1
+	},
+/obj/item/clothing/neck/roguetown/menears,
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"s" = (
+/obj/structure/table/vtable/v2,
+/obj/item/roguegem/random,
+/obj/item/roguegem/random{
+	pixel_x = -16;
+	pixel_y = 6
+	},
+/obj/item/roguegem/random{
+	pixel_y = 8;
+	pixel_x = 6
+	},
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"u" = (
+/obj/item/rogueweapon/shovel,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"w" = (
+/obj/item/clothing/ring/active/nomag,
+/obj/structure/table/wood/counter/end,
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"x" = (
+/obj/machinery/light/rogue/firebowl,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"y" = (
+/obj/structure/table/vtable,
+/obj/item/roguegem/diamond,
+/obj/item/roguegem/blue{
+	pixel_y = 13
+	},
+/obj/item/roguegem{
+	pixel_x = -9;
+	pixel_y = 9
+	},
+/obj/item/roguegem/green{
+	pixel_y = 12;
+	pixel_x = 11
+	},
+/obj/item/roguegem/yellow{
+	pixel_x = -9
+	},
+/obj/item/roguegem/violet{
+	pixel_x = 6
+	},
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"A" = (
+/obj/structure/gate/bars/preopen,
+/turf/open/floor/rogue/dirt/road,
+/area/rogue)
+"B" = (
+/obj/structure/toilet,
+/obj/item/clothing/neck/roguetown/psycross/g,
+/obj/item/natural/poo{
+	pixel_y = 9
+	},
+/obj/item/natural/poo{
+	pixel_y = -4;
+	pixel_x = 6
+	},
+/obj/item/natural/poo{
+	pixel_x = -4
+	},
+/turf/open/transparent/openspace,
+/area/rogue)
+"E" = (
+/obj/structure/bed/rogue/shit,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"H" = (
+/obj/structure/stairs,
+/obj/structure/stairs,
+/obj/structure/stairs,
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"I" = (
+/obj/structure/fluff/railing/border{
+	dir = 5
+	},
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"J" = (
+/obj/structure/chair/stool/rogue,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"K" = (
+/obj/structure/roguetent,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"L" = (
+/turf/open/transparent/openspace,
+/area/rogue)
+"M" = (
+/mob/living/carbon/human/species/orc/tribal,
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"N" = (
+/turf/closed/wall/mineral/rogue/wooddark/vertical,
+/area/rogue)
+"O" = (
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"P" = (
+/obj/structure/stairs,
+/turf/open/transparent/openspace,
+/area/rogue)
+"Q" = (
+/obj/structure/fluff/railing/border{
+	dir = 4
+	},
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"R" = (
+/obj/structure/fluff/railing/border{
+	dir = 6
+	},
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+"S" = (
+/obj/structure/roguetent,
+/turf/open/floor/rogue/dirt/road,
+/area/rogue)
+"T" = (
+/turf/closed/mineral/rogue/bedrock,
+/area/rogue)
+"Y" = (
+/obj/structure/mineral_door/wood/donjon/stone,
+/turf/open/floor/rogue/dirt,
+/area/rogue)
+"Z" = (
+/obj/structure/fluff/railing/border,
+/turf/open/floor/rogue/ruinedwood/spiral,
+/area/rogue)
+
+(1,1,1) = {"
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+"}
+(2,1,1) = {"
+T
+O
+O
+O
+O
+O
+O
+O
+p
+O
+j
+j
+j
+j
+j
+j
+j
+j
+j
+T
+"}
+(3,1,1) = {"
+T
+O
+g
+n
+g
+n
+g
+O
+p
+O
+j
+E
+j
+j
+E
+j
+j
+E
+j
+T
+"}
+(4,1,1) = {"
+T
+O
+O
+O
+u
+O
+O
+O
+p
+O
+j
+K
+j
+j
+K
+j
+j
+K
+j
+T
+"}
+(5,1,1) = {"
+T
+O
+g
+n
+g
+g
+g
+O
+p
+O
+O
+c
+c
+c
+c
+c
+c
+c
+c
+T
+"}
+(6,1,1) = {"
+T
+O
+O
+O
+O
+O
+O
+O
+p
+O
+O
+O
+O
+c
+O
+J
+O
+c
+O
+T
+"}
+(7,1,1) = {"
+T
+O
+O
+O
+O
+O
+O
+O
+p
+O
+O
+O
+O
+c
+J
+e
+J
+c
+O
+T
+"}
+(8,1,1) = {"
+T
+O
+O
+O
+O
+x
+O
+O
+p
+O
+O
+O
+O
+c
+O
+J
+O
+c
+O
+T
+"}
+(9,1,1) = {"
+c
+c
+c
+c
+c
+c
+c
+c
+A
+c
+c
+c
+c
+c
+c
+c
+c
+c
+O
+T
+"}
+(10,1,1) = {"
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+O
+T
+"}
+(11,1,1) = {"
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+O
+T
+"}
+(12,1,1) = {"
+T
+O
+c
+O
+O
+x
+O
+O
+p
+O
+O
+O
+c
+O
+O
+O
+O
+O
+O
+T
+"}
+(13,1,1) = {"
+T
+O
+c
+O
+O
+O
+O
+O
+p
+O
+O
+l
+Y
+N
+N
+N
+N
+N
+l
+T
+"}
+(14,1,1) = {"
+T
+O
+c
+O
+O
+O
+O
+O
+p
+O
+O
+i
+a
+a
+a
+a
+a
+a
+i
+T
+"}
+(15,1,1) = {"
+T
+O
+c
+O
+O
+O
+O
+O
+p
+O
+O
+i
+a
+a
+a
+a
+a
+a
+i
+T
+"}
+(16,1,1) = {"
+T
+O
+c
+O
+O
+O
+O
+O
+p
+O
+O
+i
+a
+a
+a
+a
+a
+a
+i
+T
+"}
+(17,1,1) = {"
+T
+j
+S
+j
+O
+O
+O
+O
+p
+O
+O
+i
+a
+a
+a
+H
+i
+a
+i
+T
+"}
+(18,1,1) = {"
+T
+j
+B
+j
+O
+O
+O
+O
+p
+O
+O
+i
+a
+a
+a
+H
+i
+a
+i
+T
+"}
+(19,1,1) = {"
+T
+j
+j
+j
+O
+O
+O
+O
+p
+O
+O
+l
+N
+N
+N
+N
+N
+N
+l
+T
+"}
+(20,1,1) = {"
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+T
+"}
+
+(1,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(2,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(3,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(4,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+j
+L
+L
+L
+j
+L
+L
+"}
+(5,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(6,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(7,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(8,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(9,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(10,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(11,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(12,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
+(13,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+l
+N
+h
+N
+N
+h
+N
+l
+L
+"}
+(14,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+i
+y
+a
+M
+a
+a
+a
+i
+L
+"}
+(15,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+i
+s
+a
+a
+a
+a
+a
+i
+L
+"}
+(16,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+i
+m
+a
+R
+Q
+Q
+I
+i
+L
+"}
+(17,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+i
+w
+a
+Z
+L
+P
+a
+i
+L
+"}
+(18,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+i
+r
+a
+Z
+L
+P
+a
+i
+L
+"}
+(19,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+l
+N
+N
+N
+N
+N
+N
+l
+L
+"}
+(20,1,2) = {"
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+"}
