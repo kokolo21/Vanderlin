@@ -60,8 +60,7 @@
 	. = ..()
 	if(!succeeded)
 		controller.clear_blackboard_key(target_key)
-		if(controller.pawn.icon_state != "Trollso")
-			controller.pawn.icon_state = "Trollso"
+		controller.pawn.icon_state = "Trollso"
 
 /datum/ai_behavior/eat_dead_body/mimic/finish_action(datum/ai_controller/controller, succeeded, target_key, targetting_datum_key, hiding_location_key)
 	. = ..()

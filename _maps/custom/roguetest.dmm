@@ -1049,9 +1049,9 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/outdoors)
 "cM" = (
-/obj/structure/trench,
-/turf/open/floor/rogue/dirt/road,
-/area/rogue/indoors)
+/obj/structure/roguemachine/steward,
+/turf/open/floor/rogue/cobble,
+/area/rogue/outdoors)
 "cN" = (
 /turf/open/floor/rogue/dirt/road,
 /area/rogue)
@@ -1066,9 +1066,6 @@
 /area/rogue/outdoors)
 "cQ" = (
 /obj/structure/roguemachine/scomm,
-/obj/structure/lever{
-	redstone_id = "test2"
-	},
 /turf/open/floor/rogue/cobble,
 /area/rogue/outdoors)
 "cR" = (
@@ -1102,21 +1099,8 @@
 "cX" = (
 /turf/open/floor/rogue/carpet/lord/right,
 /area/rogue/indoors)
-"gV" = (
-/obj/structure/water_dam{
-	dir = 1;
-	redstone_id = "test"
-	},
-/turf/open/water/acid,
-/area/rogue/outdoors)
 "hP" = (
 /obj/item/rogueweapon/polearm/woodstaff/aries,
-/turf/open/floor/rogue/cobble,
-/area/rogue/outdoors)
-"iV" = (
-/obj/structure/lever{
-	redstone_id = "test"
-	},
 /turf/open/floor/rogue/cobble,
 /area/rogue/outdoors)
 "qw" = (
@@ -1148,10 +1132,6 @@
 /obj/effect/landmark/start/consort,
 /turf/open/floor/rogue/carpet/lord/left,
 /area/rogue/indoors)
-"QB" = (
-/obj/structure/trench,
-/turf/open/floor/rogue/dirt/road,
-/area/rogue/outdoors)
 "QR" = (
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
@@ -1164,13 +1144,6 @@
 "Uv" = (
 /turf/closed,
 /area/rogue)
-"US" = (
-/obj/structure/water_dam{
-	dir = 8;
-	redstone_id = "test2"
-	},
-/turf/open/water,
-/area/rogue/outdoors)
 "Wo" = (
 /turf/closed/mineral/rogue/bedrock,
 /area/rogue)
@@ -1445,10 +1418,10 @@ Uv
 ab
 ab
 ag
-cM
 aj
 aj
-cM
+aj
+aj
 av
 ab
 ax
@@ -1487,10 +1460,10 @@ Uv
 ab
 ab
 af
-cM
+aj
 ao
 aj
-cM
+aj
 aw
 ab
 ax
@@ -1529,10 +1502,10 @@ Uv
 ab
 ab
 ag
-cM
-cM
-cM
-cM
+aj
+aj
+aj
+aj
 aw
 ab
 ax
@@ -1571,8 +1544,8 @@ Uv
 ab
 ab
 ag
-cM
-cM
+aj
+aj
 aj
 aj
 aw
@@ -1614,7 +1587,7 @@ ab
 ab
 ah
 aj
-cM
+aj
 ae
 ah
 ah
@@ -1655,9 +1628,9 @@ Uv
 ab
 ab
 cQ
-iV
-QB
-gV
+aJ
+al
+al
 aQ
 al
 ai
@@ -1698,7 +1671,7 @@ ab
 ab
 cK
 aJ
-QB
+al
 al
 al
 al
@@ -1740,7 +1713,7 @@ ab
 ab
 cL
 aJ
-QB
+al
 aJ
 al
 al
@@ -1780,9 +1753,9 @@ aj
 cU
 Fo
 cU
-aJ
+cM
 qw
-US
+aJ
 cC
 al
 al

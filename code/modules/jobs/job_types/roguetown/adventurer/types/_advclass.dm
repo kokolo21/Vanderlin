@@ -5,7 +5,6 @@
 	var/list/allowed_sexes
 	var/list/allowed_races = list(
 	"Humen",
-	"Rakshari",
 	"Elf",
 	"Half-Elf",
 	"Dwarf",

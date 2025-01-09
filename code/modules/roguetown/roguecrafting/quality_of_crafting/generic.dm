@@ -12,7 +12,6 @@
 	crafting_message = "starts rolling a westleach zig"
 	craftdiff = 0
 	uses_attacking_atom = TRUE
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/sigsweet
 	name = "swampweed zig"
@@ -28,4 +27,3 @@
 	crafting_message = "starts rolling a swampweed zig"
 	craftdiff = 0
 	uses_attacking_atom = TRUE
-	subtypes_allowed = TRUE
