@@ -110,7 +110,7 @@
 	H.cmode_music = 'sound/music/cmode/garrison/CombatGarrison.ogg'
 
 /datum/migrant_role/crossbow_bannerman
-	name = "Bannermen Crossboman"
+	name = "Bannermen Crossbowman"
 	greet_text = "You were apart of an expedition sent by the King of Vanderlin to Kingsfield, you and your serjeant-at-arms have returned upon fullfiling your task."
 	outfit = /datum/outfit/job/roguetown/crossbow_bannerman
 	allowed_races = list("Humen","Dwarf","Aasimar", "Half-Elf", "Elf")
