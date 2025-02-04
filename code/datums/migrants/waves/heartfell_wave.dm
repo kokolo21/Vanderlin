@@ -41,6 +41,7 @@
 		H.change_stat(STATKEY_PER, 2)
 		H.change_stat(STATKEY_LCK, 2)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_NOSEGRAB, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	H.cmode_music = 'sound/music/cmode/nobility/combat_noble.ogg'
@@ -169,7 +170,6 @@
 		H.mind?.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)
 		H.change_stat(STATKEY_STR, 3)
 		H.change_stat(STATKEY_PER, 1)
-		H.change_stat(STATKEY_INT, 2)
 		H.change_stat(STATKEY_CON, 2)
 		H.change_stat(STATKEY_END, 2)
 		H.change_stat(STATKEY_SPD, -1)
@@ -242,7 +242,6 @@
 		H.change_stat(STATKEY_INT, 4)
 		if(H.age == AGE_OLD)
 			H.change_stat(STATKEY_SPD, -1)
-			H.change_stat(STATKEY_INT, 1)
 			H.change_stat(STATKEY_PER, 1)
 			if(ishumannorthern(H))
 				belt = /obj/item/storage/belt/rogue/leather/plaquegold
@@ -270,7 +269,7 @@
 	shoes = /obj/item/clothing/shoes/roguetown/shortboots
 	belt = /obj/item/storage/belt/rogue/leather/rope
 	beltl = /obj/item/flashlight/flare/torch/lantern
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
+	beltr = /obj/item/storage/belt/rogue/pouch/coins/mid
 	armor = /obj/item/clothing/suit/roguetown/shirt/robe/priest
 	cloak = /obj/item/clothing/cloak/chasuble
 	backl = /obj/item/storage/backpack/rogue/satchel
