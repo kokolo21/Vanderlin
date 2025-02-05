@@ -29,3 +29,12 @@
 	if(!dreams)
 		return null
 	return pick(dreams)
+
+/datum/skill/Topic(href, href_list)
+	. = ..()
+	if(href_list["skill_ref"])
+		var/datum/skill/S = locate(href_list["skill_ref"])
+		if(S)
+			to_chat(usr, span_info(S.desc))
+			return
+		return

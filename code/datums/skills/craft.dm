@@ -5,7 +5,7 @@
 
 /datum/skill/craft/crafting
 	name = "Crafting"
-	desc = ""
+	desc = "Crafting is a general skill that represents your character's ability to craft items. The higher your skill in Crafting, the better you can craft items."
 	dreams = list(
 		"...you feel grass under you feet as you peer onto a meadow, you prepare a campfire and a tent and drift off into deeper slumber.."
 	)
