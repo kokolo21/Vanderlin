@@ -395,9 +395,9 @@
 
 /datum/mind/proc/print_levels(user)
 	var/list/shown_skills = list()
-	for(var/datum/skill/S in known_skills)
-		if(known_skills[S]) // Do we actually have a level in this?
-			shown_skills += S
+	for(var/i in known_skills)
+		if(known_skills[i]) //Do we actually have a level in this?
+			shown_skills += i
 	if(!length(shown_skills))
 		to_chat(user, span_warning("I don't have any skills."))
 		return
