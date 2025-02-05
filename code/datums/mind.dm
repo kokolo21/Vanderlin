@@ -82,8 +82,6 @@
 	var/list/known_skills = list()
 	///Assoc list of skills - exp
 	var/list/skill_experience = list()
-	///Assoc list of skill refereneces
-	var/list/skill_references = list()
 
 	var/list/special_items = list()
 
@@ -411,21 +409,6 @@
 		var/skill_link = "<a href='byond://?src=[REF(src)];skill_ref=[REF(S)]'>?</a>"
 		msg += "[skill_name] - [skill_level] [skill_link]\n"
 	to_chat(user, msg)
-
-/*/datum/mind/proc/print_levels(user)
-	var/list/shown_skills = list()
-	for(var/i in known_skills)
-		if(known_skills[i]) //Do we actually have a level in this?
-			shown_skills += i
-	if(!length(shown_skills))
-		to_chat(user, span_warning("I don't have any skills."))
-		return
-	var/msg = ""
-	msg += span_info("*---------*\n")
-	for(var/i in shown_skills)
-		msg += "[i] - [SSskills.level_names[known_skills[i]]]\n"
-	to_chat(user, msg) */
-
 
 /datum/mind/proc/set_death_time()
 	last_death = world.time
