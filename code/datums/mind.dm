@@ -406,7 +406,7 @@
 	for(var/datum/skill/S in shown_skills)
 		var/skill_name = S.name
 		var/skill_level = SSskills.level_names[known_skills[S]]
-		var/skill_link = "<a href='byond://?src=[REF(S)];skill_ref=[REF(S)]'>?</a>"
+		var/skill_link = "<a href='byond://?src=[REF(S)];action=examine'>?</a>"
 		msg += "[skill_name] - [skill_level] [skill_link]\n"
 	to_chat(user, msg)
 
@@ -544,7 +544,6 @@
 		recipient << browse(output,"window=memory")
 
 /datum/mind/Topic(href, href_list)
-
 	if(!check_rights(R_ADMIN))
 		return
 

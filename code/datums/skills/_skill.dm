@@ -30,11 +30,12 @@
 		return null
 	return pick(dreams)
 
-/datum/skill/Topic(href, href_list)
+/datum/skill/Topic(href, href_list) //This calls for the skill's description, when they click the ? in mind/print_levels
 	. = ..()
-	if(href_list["skill_ref"])
-		var/datum/skill/S = locate(href_list["skill_ref"])
-		if(S)
-			to_chat(usr, span_info(S.desc))
+	switch(href_list["action"])
+		if("examine")
+			var/datum/skill/S = locate(href_list["action"])
+			if(S)
+				to_chat(usr, span_info(S.desc))
+				return
 			return
-		return
