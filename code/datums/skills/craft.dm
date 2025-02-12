@@ -105,7 +105,12 @@
 /datum/skill/craft/tanning
 	name = "Skincrafting"
 	desc = "Skinning is a skill that represents your character's ability to skin animals. The higher your skill in Skinning, the better the hides you can get from animals and the more you can get from them."
-
+	dreams = list(
+		"...you stare down at the rabbit, its eyes wide and unblinking... you feel the knife in your hand, and the blood on your hands... and the warmth of the pelt..."
+	)
 /datum/skill/craft/tailor
 	name = "Clothesmaking"
 	desc = "Tailoring is a skill that represents your character's ability to craft clothing. The higher your skill in Tailoring, the better the clothes you can create and the more you can make with your materials."
+	dreams = list(
+		"...the needle moves in and out of the fabric, the thread trailing behind it... but the thread is your life, and the fabric is your soul... you feel the needle prick your finger, and you see the blood stain the cloth..."
+	)
