@@ -7,6 +7,7 @@
 
 /datum/skill/labor/mining
 	name = "Mining"
+	desc = "Mining is a skill that represents your character's ability to mine. The higher your skill in Mining, the faster you can mine and the more materials you can get from veins."
 	dreams = list(
 		"...your masters scream as the man and his guards are slain by the knight... your brothers tremble, screaming and staring as the horror looms over the hero. you grab your pick, and begin to break the chains..."
 	)
@@ -30,6 +31,7 @@
 
 /datum/skill/labor/farming
 	name = "Farming"
+	desc = "Farming is a skill that represents your character's ability to farm. The higher your skill in Farming, the more crops you can grow and the faster they will grow." //Probably not true, but placeholder.
 	dreams = list(
 		"...you plant your thumb into the dirt, before pulling it back - gently placing a seed into the crevice..."
 	)

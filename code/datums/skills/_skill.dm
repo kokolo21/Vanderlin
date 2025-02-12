@@ -34,8 +34,5 @@
 	. = ..()
 	switch(href_list["action"])
 		if("examine")
-			var/datum/skill/S = locate(href_list["action"])
-			if(S)
-				to_chat(usr, span_info(S.desc))
-				return
+			to_chat(usr, span_info(desc))
 			return

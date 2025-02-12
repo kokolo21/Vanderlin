@@ -403,11 +403,10 @@
 		return
 	var/msg = ""
 	msg += span_info("*---------*\n")
-	for(var/datum/skill/S in shown_skills)
-		var/skill_name = S.name
+	for(var/datum/skill/S as anything in shown_skills)
 		var/skill_level = SSskills.level_names[known_skills[S]]
 		var/skill_link = "<a href='byond://?src=[REF(S)];action=examine'>?</a>"
-		msg += "[skill_name] - [skill_level] [skill_link]\n"
+		msg += "[S] - [skill_level] [skill_link]\n"
 	to_chat(user, msg)
 
 /datum/mind/proc/set_death_time()
