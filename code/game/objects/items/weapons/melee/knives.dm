@@ -219,7 +219,7 @@
 	desc = "A short blade that even the weakest of hands can aspire to do harm with."
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/chop)
 	icon_state = "combatknife"
-	throwforce = DAMAGE_DAGGER
+	throwforce = DAMAGE_DAGGER+4 //16 total
 	max_integrity = 180
 	slot_flags = ITEM_SLOT_HIP
 	w_class = WEIGHT_CLASS_NORMAL
