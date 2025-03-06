@@ -125,7 +125,6 @@
 	bigboy = TRUE
 	gripsprite = TRUE
 	w_class = WEIGHT_CLASS_BULKY
-	wbalance = 0
 	wlength = WLENGTH_LONG
 	slot_flags = ITEM_SLOT_BACK
 	max_integrity = 500
