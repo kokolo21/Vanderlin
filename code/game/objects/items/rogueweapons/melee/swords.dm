@@ -355,6 +355,7 @@
 	swingsound = BLADEWOOSH_SMALL
 	minstr = 6
 	wbalance = VERY_HARD_TO_DODGE
+	wdefense = GOOD_PARRY
 	pixel_y = -16
 	pixel_x = -16
 	dropshrink = 0.8
@@ -830,6 +831,7 @@
 	bigboy = TRUE
 	gripsprite = TRUE
 	wlength = WLENGTH_GREAT
+	wbalance = HARD_TO_DODGE
 	w_class = WEIGHT_CLASS_BULKY
 	minstr = 8
 	smeltresult = /obj/item/ingot/iron
@@ -892,7 +894,7 @@
 
 /datum/intent/sword/thrust/estoc
 	name = "thrust"
-	penfactor = 50
+	penfactor = AP_SWORD_THRUST+5
 	recovery = 20
 	clickcd = 10
 
@@ -906,11 +908,10 @@
 	hitsound = list('sound/combat/hits/bladed/genstab (1).ogg', 'sound/combat/hits/bladed/genstab (2).ogg', 'sound/combat/hits/bladed/genstab (3).ogg')
 	reach = 2
 	penfactor = 30
-	damfactor = 1.2
 	chargetime = 5
 	recovery = 20
 	clickcd = 10
-
+	no_early_release = TRUE
 
 /obj/item/rogueweapon/sword/gladius
 	force = 22

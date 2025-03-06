@@ -440,6 +440,6 @@
 	chargedrain = 1
 	misscost = 1
 	no_early_release = TRUE
-	penfactor = 80
+	penfactor = 40
 	damfactor = 0.9
 	item_damage_type = "stab"
