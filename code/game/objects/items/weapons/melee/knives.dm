@@ -181,7 +181,7 @@
 	return ..()
 
 /obj/item/weapon/knife/scissors/steel
-	force = DAMAGE_KNIFE+1 //11 total, better than normal scissors by 1
+	force = DAMAGE_DAGGER+2 //14 total
 	max_integrity = 150
 	name = "steel scissors"
 	desc = "Scissors made of solid steel that may be used to salvage usable materials from clothing, more durable and a tad more deadly than their iron conterpart."
@@ -203,7 +203,7 @@
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/chop/cleaver)
 	parrysound = list('sound/combat/parry/bladed/bladedmedium (1).ogg','sound/combat/parry/bladed/bladedmedium (2).ogg','sound/combat/parry/bladed/bladedmedium (3).ogg')
 	swingsound = list('sound/combat/wooshes/bladed/wooshmed (1).ogg','sound/combat/wooshes/bladed/wooshmed (2).ogg','sound/combat/wooshes/bladed/wooshmed (3).ogg')
-	throwforce = DAMAGE_DAGGER
+	throwforce = DAMAGE_DAGGER+3 //15 total
 	max_integrity = 150
 	slot_flags = ITEM_SLOT_HIP
 	thrown_bclass = BCLASS_CHOP
@@ -240,7 +240,6 @@
 //................ Iron Dagger ............... //
 /obj/item/weapon/knife/dagger
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/thrust)
-	force = DAMAGE_DAGGER
 	name = "iron dagger"
 	desc = "Thin, sharp, pointed death."
 	icon_state = "idagger"
@@ -250,7 +249,6 @@
 //................ Steel Dagger ............... //
 /obj/item/weapon/knife/dagger/steel
 	name = "steel dagger"
-	force = DAMAGE_DAGGER+1 //13 total
 	desc = "A dagger made of refined steel."
 	icon_state = "sdagger"
 	melting_material = null
@@ -440,7 +438,7 @@
 	name = "iron tossblade"
 	desc = ""
 	item_state = "bone_dagger"
-	force = DAMAGE_KNIFE
+	force = DAMAGE_DAGGER
 	throwforce = DAMAGE_DAGGER+13
 	throw_speed = 4
 	max_integrity = 50
