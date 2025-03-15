@@ -835,7 +835,7 @@
 	smeltresult = /obj/item/ingot/iron
 	associated_skill = /datum/skill/combat/swords
 	max_blade_int = 300
-	wdefense = AVERAGE_PARRY
+	wdefense = GREAT_PARRY
 	wbalance = DODGE_CHANCE_NORMAL
 
 /obj/item/weapon/estoc/getonmobprop(tag)
