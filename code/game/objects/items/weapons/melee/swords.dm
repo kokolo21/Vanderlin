@@ -892,7 +892,7 @@
 
 /datum/intent/sword/thrust/estoc
 	name = "thrust"
-	penfactor = 50
+	penfactor = 30
 	recovery = 20
 	clickcd = 10
 
@@ -905,9 +905,8 @@
 	blade_class = BCLASS_STAB
 	hitsound = list('sound/combat/hits/bladed/genstab (1).ogg', 'sound/combat/hits/bladed/genstab (2).ogg', 'sound/combat/hits/bladed/genstab (3).ogg')
 	reach = 2
-	penfactor = 30
-	damfactor = 1.2
-	chargetime = 5
+	penfactor = 50
+	chargetime = 7
 	recovery = 20
 	clickcd = 10
 
