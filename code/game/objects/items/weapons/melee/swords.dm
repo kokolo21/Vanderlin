@@ -817,12 +817,13 @@
 	inhand_x_dimension = 64
 	inhand_y_dimension = 64
 	possible_item_intents = list(
-		/datum/intent/sword/thrust,
+		/datum/intent/sword/chop,
 		/datum/intent/sword/strike,
 	)
 	gripped_intents = list(
 		/datum/intent/sword/thrust/estoc,
 		/datum/intent/sword/lunge,
+		/datum/intent/sword/chop
 		/datum/intent/sword/strike,
 	)
 	bigboy = TRUE
@@ -833,7 +834,7 @@
 	smeltresult = /obj/item/ingot/iron
 	associated_skill = /datum/skill/combat/swords
 	max_blade_int = 300
-	wbalance = DODGE_CHANCE_NORMAL //Worse than a rapier
+	wdefense = ULTMATE_PARRY
 
 /obj/item/weapon/estoc/getonmobprop(tag)
 	. = ..()
