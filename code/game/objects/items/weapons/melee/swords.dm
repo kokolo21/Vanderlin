@@ -907,7 +907,8 @@
 	hitsound = list('sound/combat/hits/bladed/genstab (1).ogg', 'sound/combat/hits/bladed/genstab (2).ogg', 'sound/combat/hits/bladed/genstab (3).ogg')
 	reach = 2
 	penfactor = AP_SWORD_THRUST+30 //50 total
-	chargetime = 7
+	chargetime = 5
+	no_early_release = TRUE
 	recovery = 20
 	clickcd = 10
 
